@@ -7,7 +7,7 @@ const Request = require('./RequestHandler');
    }
    
    get(path, options) {
-     options.method = "GET";
+     options.method = 'GET';
      this.handler.request(path, options)
    }
    
