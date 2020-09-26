@@ -24,7 +24,7 @@ class RequestHandler {
         };
       }
       if(res.status == 429) {
-        this.client.debug(`Ratelimited while ${options.method} to /${path}`);
+        this.client.debug(`Ratelimited while ${options.method} request to /${path}`);
         this.client.emit('Ratelimit', {
           path: `/${path}`,
           method: options.method,
@@ -40,7 +40,7 @@ class RequestHandler {
   
   getFullPath(path) {
     if(!this.client.token) {
-      throw new Error('NO TOKEN PROVIDED');
+      throw new Error('TELEGRAM BOT TOKEN NOT PROVIDED');
     }
     return `${this.baseURL}/bot${this.client.token}/${path}`;
   }
