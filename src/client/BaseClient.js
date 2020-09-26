@@ -58,7 +58,17 @@ class BaseClient extends EventEmitter {
   get api() {
     return this.rest;
   }
-
+  
+  /**
+   * Emitts debug events
+   * @param {string} content Content to emit
+   */
+   debug(content) {
+     if(this.listeners('debug').length) {
+       this.emit('debug', content);
+     }
+   }
+   
   /**
    * Destroys all assets used by the base client.
    */
