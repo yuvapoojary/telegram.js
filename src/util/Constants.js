@@ -1,13 +1,13 @@
 /**
- * options for client
- * @typedeaf {Object} ClientOptions
- */
+ options for client
+  ClientOptions
+ 
 
 export.DefaultOptions = {
   cacheMessages: true,
   debug: false
 };
-  /**
+  
    polling options
     @typedeaf {Object} pollingOptions
     @property {boolean} [enabled=true] Whether to enable polling
@@ -18,4 +18,4 @@ export.DefaultOptions = {
     interval: 300,
   }
 };
-**/
+*/
