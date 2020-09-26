@@ -4,7 +4,6 @@ const Request = require('./RequestHandler');
    constructor(client) {
      this.client = client;
      this.handler = new Request(client);
-     
    }
    
    get(path, options) {
