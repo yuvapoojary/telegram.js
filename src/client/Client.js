@@ -65,8 +65,18 @@ const BaseClient = require('./BaseClient');
            async login(token = this.token) {
              if(!token || typeof token != 'string') throw new Error('NO TOKEN OR INVALID TOKEN PROVIDED');
              this.debug(`Provided token ${token}`);
+             try {
+               await this.trackUpdates();
+             } catch(err) {
+               
+             };
              
            }
+           
+           /**
+            * Track telegram updates either through polling or webhooks 
+            * 
+            */
           
           
    
