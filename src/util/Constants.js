@@ -1,21 +1,14 @@
-/**
- options for client
-  ClientOptions
- 
 
-export.DefaultOptions = {
+const DefaultOptions = {
   cacheMessages: true,
-  debug: false
-};
-  
-   polling options
-    @typedeaf {Object} pollingOptions
-    @property {boolean} [enabled=true] Whether to enable polling
-   @property {number} [interval=300] Interval for polling updates from telegram (in ms - do not set too low interval)
-   
+  debug: false,
   polling: {
     enabled: true,
     interval: 300,
   }
 };
-*/
+
+
+
+module.exports = { DefaultOptions };
+
