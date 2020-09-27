@@ -63,7 +63,7 @@ class BaseClient extends EventEmitter {
    * Emitts debug event
    * @param {string} content Content to emit
    */
-  debug(content) {
+  async debug(content) {
     if(this.listeners('debug').length) {
       this.emit('debug', content);
       };

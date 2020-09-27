@@ -75,9 +75,15 @@ const BaseClient = require('./BaseClient');
            
            /**
             * Track telegram updates either through polling or webhooks 
-            * 
             */
+            async trackUpdates() {
+              
+            }
           
+          fetchApplication() {
+            return this.api.get('getMe')
+            .then((res) => new User(res));
+          }
           
    
  }
