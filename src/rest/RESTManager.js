@@ -1,5 +1,7 @@
 const APIRouter = require('./APIRouter');
 const APIRequest = require('./APIRequest');
+const HTTPError = require('./HTTPError');
+const TelegramAPIError = require('../errors/TelegramAPIError');
 
 class RESTManager {
   constructor(client) {
@@ -16,21 +18,37 @@ class RESTManager {
 
   async request(method, path, options) {
     const handler = new APIRequest(this, method, path, options);
-    let json;
-    const res = await handler.make();
+    let res;
+    let result;
+
     try {
-      json = await res.json();
-    } catch (e) {
-      throw new Error('Unable to parse api response');
+      res = await handler.make();
+    } catch (err) {
+      throw new HTTPError(err.message, err.constructor.name, err.status, method, path);
     };
-    console.log(json, handler.url);
-    if (res.ok) return json;
-    return Promise.reject(json);
-  };
+
+    try {
+      result = await this.parseResponse(res);
+    } catch (err) {
+      throw new HTTPError(err.message, err.constructor.name, err.status, method, path);
+    };
+
+    if (res.ok && result.ok) return result.result;
+
+    if (!result.ok) {
+      throw new TelegramAPIError(path, result, method, res.status);
+    };
+
+  }
 
   getAuth() {
     return `bot${this.client.token}`;
   };
+
+  parseResponse(res) {
+    if (res.headers.get('content-type').startsWith('application/json')) return res.json();
+    return res.buffer();
+  }
 
 }
 
