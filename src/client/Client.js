@@ -107,7 +107,7 @@ class Client extends BaseClient {
   
   
   getUpdates(data) {
-    return this.api.getUpdates(data).get();
+    return this.api.getUpdates().get(data);
   };
 
 
