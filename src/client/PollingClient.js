@@ -30,6 +30,7 @@ class PollingClient {
   }
 
   poll() {
+    console.log(this.offset);
     this.client.getUpdates({
       data: {
         offset: this.offset
@@ -43,11 +44,12 @@ class PollingClient {
         
       })
       .catch((err) => {
+        if(err.status == 404) return;
         if (err.status == 409) {
           return this.client.removeWebhook()
             .then(() => this.poll());
         };
-        throw err;
+       throw err;
       })
       .finally(() => {
         this.pollTimeout = setTimeout(() => {
