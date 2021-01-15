@@ -1,3 +1,5 @@
+const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+
 /**
  * Contains various usefull utility functions
  */
