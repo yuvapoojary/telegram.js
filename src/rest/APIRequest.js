@@ -11,7 +11,8 @@ class APIRequest {
     this.path = path;
     this.options = options;
     this.querystring = '';
-
+    
+    console.log(options);
     if (options.query) {
       const query = Object.entries(options.query)
         .filter(([, value]) => value !== null && typeof value !== 'undefined')

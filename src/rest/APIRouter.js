@@ -6,6 +6,7 @@ function APIRouter(manager) {
   const route = [];
   const handler = {
     get(target, name) {
+      console.log(route, name);
       if (method.includes(name)) {
         return options => manager.request(
           name,
