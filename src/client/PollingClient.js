@@ -31,7 +31,9 @@ class PollingClient {
 
   poll() {
     this.client.getUpdates({
-      offset: 511254214
+      data: {
+        offset: this.offset
+      }
     })
       .then((res) => {
         this.offset = res[res.length - 1].update_id + 1;
