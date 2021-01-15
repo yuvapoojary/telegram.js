@@ -29,7 +29,7 @@ class RESTManager {
   };
 
   getAuth() {
-    return `bot${this.endpoint}`;
+    return `bot${this.client.token}`;
   };
 
 }
