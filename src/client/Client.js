@@ -1,4 +1,5 @@
 const BaseClient = require('./BaseClient');
+const PollingClient = require('./PollingClient');
 const ClientUser = require('../structures/ClientUser');
 
 /**
@@ -21,7 +22,7 @@ class Client extends BaseClient {
      * The polling client used to get updates from telegram API
      * @type {PollingClient}
      */
-    //this.polling = new PollingClient(this);
+    this.polling = new PollingClient(this);
 
     /**
      * The webhook client used to get updates from telegram API
@@ -49,6 +50,7 @@ class Client extends BaseClient {
      * @type {?ClientUser}
      */
      this.user = null;
+     
      
     /**
      * The time at which the client was ready 
@@ -82,14 +84,18 @@ class Client extends BaseClient {
 
     };
 
-  }
+  };
+  
+  startPolling() {
+    this.polling.start();
+  };
 
   /**
    * Track telegram updates either through polling or webhooks 
    */
   async trackUpdates() {
 
-  }
+  };
 
   fetchApplication() {
     return this.api.getMe.get()
@@ -97,6 +103,11 @@ class Client extends BaseClient {
         this.user = new ClientUser(this, res);
         return this.user;
       });
+  };
+  
+  
+  getUpdates() {
+    return this.api.getUpdates().get();
   };
 
 

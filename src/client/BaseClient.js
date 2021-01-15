@@ -57,8 +57,13 @@ class BaseClient extends EventEmitter {
    */
   get api() {
     return this.rest.api;
-  }
+  };
   
+  
+  _processUpdate(data) {
+    this.client.emit('raw', data);
+    
+  };
   /**
    * Emitts debug event
    * @param {string} content Content to emit
