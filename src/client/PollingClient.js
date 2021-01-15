@@ -8,7 +8,7 @@ class PollingClient {
     this.options = client.options;
     this.lastUpdate = null;
     this.lastRequest = null;
-    this.offset = client.options.pollingOffset || 0;
+    this.offset = client.options.pollingOffset || null;
     this.interval = client.options.interval || 1000;
     this.pollTimeout = null;
     
