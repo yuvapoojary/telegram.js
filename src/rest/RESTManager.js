@@ -23,7 +23,7 @@ class RESTManager {
     } catch (e) {
       throw new Error('Unable to parse api response');
     };
-    console.log(json)
+    console.log(json, handler.url);
     if (res.ok) return json;
     return Promise.reject(json);
   };
