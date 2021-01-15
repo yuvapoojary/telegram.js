@@ -2,7 +2,7 @@
 
 require('setimmediate');
 const EventEmitter = require('events');
-const RestManager = require('../rest/RestManager');
+const RestManager = require('../rest/RESTManager');
 const { DefaultOptions } = require('../util/Constants');
 const Util = require('../util/Util');
 
@@ -56,7 +56,7 @@ class BaseClient extends EventEmitter {
    * @private
    */
   get api() {
-    return this.rest;
+    return this.rest.api;
   }
   
   /**
