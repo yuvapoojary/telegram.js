@@ -7,3 +7,5 @@ const bot = new telegram ({
 bot.login(process.env.ttoken);
 
 bot.fetchApplication().then(console.log);
+
+bot.on('raw', console.log);
