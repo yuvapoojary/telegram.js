@@ -9,7 +9,7 @@ class ClientUser extends User {
     };
 
     if ('can_read_all_group_messages' in data) {
-      this.privacyMode = data.can_read_all_group_messages;
+      this.privacyMode = !data.can_read_all_group_messages;
     };
 
     if ('supports_inline_queries' in data) {
