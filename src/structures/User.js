@@ -9,7 +9,7 @@ class User extends Base {
    * @param {object} data The data for the user
    */
   constructor(data) {
-    super(data);
+    super(client, data);
     /**
      * The id of the user
      * @type {integer}

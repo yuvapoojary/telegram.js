@@ -94,7 +94,7 @@ class Client extends BaseClient {
   fetchApplication() {
     return this.api.getMe.get()
       .then((res) => {
-        this.user = new ClientUser(res);
+        this.user = new ClientUser(this, res);
         return this.user;
       });
   };
