@@ -5,7 +5,7 @@
     * @param {Client} client The instantiated client
     */
    constructor(client) {
-     Object.defineProperty(this,'client', { writable: trye });
+     Object.defineProperty(this,'client', { writable: true });
    }
    
    _patch(data) {
