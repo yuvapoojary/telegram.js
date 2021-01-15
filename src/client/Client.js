@@ -9,6 +9,7 @@ class Client extends BaseClient {
    * @param {ClientOptions} [options] Options for the client
    */
   constructor(options) {
+    super(options);
     /**
      * Options of the client
      * @type {Object} 
