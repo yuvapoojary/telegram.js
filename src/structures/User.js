@@ -8,8 +8,10 @@ class User extends Base {
    * @param {Client} client The instantiating client
    * @param {object} data The data for the user
    */
-  constructor(data) {
+  constructor(client, data) {
     super(client, data);
+    
+    this.client = client;
     /**
      * The id of the user
      * @type {integer}
