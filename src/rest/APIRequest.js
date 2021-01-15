@@ -43,6 +43,7 @@ class APIRequest {
       headers['Content-Type'] = 'application/json';
     };
     
+    console.log(body);
     return fetch(url, {
       headers,
       method: this.method,
