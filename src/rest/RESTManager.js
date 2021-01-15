@@ -24,7 +24,7 @@ const APIRequest = require('./APIRequest');
        throw new Error('Unable to parse api response');
      };
      if(res.ok) return json;
-     throw new Error(json);
+     return Promise.reject(json);
    };
    
    getAuth() {
