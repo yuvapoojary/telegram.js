@@ -10,4 +10,5 @@ bot.fetchApplication().then(console.log);
 
 bot.on('raw', console.log);
 
+bot.on('debug', console.log);
 bot.startPolling();
