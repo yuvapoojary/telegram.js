@@ -2,7 +2,7 @@ const https = require('https');
 const fetch = require('node-fetch');
 const FormData = require('@discordjs/form-data');
 
-if(https.agent) let agent = new https.agent({ keepAlive: true });
+if(https.agent) var agent = new https.agent({ keepAlive: true });
 
 class APIRequest {
   constructor(rest, method, path, options = {}) {
