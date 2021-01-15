@@ -43,15 +43,15 @@ class Client extends BaseClient {
      * @type {?string}
      */
     this.token = null;
-    
- 
+
+
     /**
      * The client user
      * @type {?ClientUser}
      */
-     this.user = null;
-     
-     
+    this.user = null;
+
+
     /**
      * The time at which the client was ready 
      * @type {?Date}
@@ -85,7 +85,7 @@ class Client extends BaseClient {
     };
 
   };
-  
+
   startPolling() {
     this.polling.start();
   };
@@ -104,8 +104,8 @@ class Client extends BaseClient {
         return this.user;
       });
   };
-  
-  
+
+
   getUpdates(data) {
     return this.api.getUpdates().get(data);
   };

@@ -5,7 +5,7 @@ const FormData = require('@discordjs/form-data');
 if(https.agent) var agent = new https.agent({ keepAlive: true });
 
 class APIRequest {
-  constructor(rest, method, path, options = {}) {
+  constructor(rest, method, path, options) {
     this.rest = rest;
     this.method = method;
     this.path = path;

@@ -16,8 +16,7 @@ class RESTManager {
     return this.client.options.ApiURL;
   };
 
-  async request(method, path, options) {
-    console.log(path);
+  async request(method, path, options = {}) {
     const handler = new APIRequest(this, method, path, options);
     let res;
     let result;
