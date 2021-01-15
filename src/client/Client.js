@@ -1,5 +1,5 @@
 const BaseClient = require('./BaseClient');
-const User = require('../structures/User');
+const ClientUser = require('../structures/ClientUser');
 
 /**
  * The main hub for interacting with telegram API
@@ -34,7 +34,7 @@ class Client extends BaseClient {
      * @type {ActionManager}
      * @private
      */
-   // this.actions = new ActionManager(this);
+    // this.actions = new ActionManager(this);
 
     /**
      * The token of the bot to authorize with API
@@ -42,7 +42,14 @@ class Client extends BaseClient {
      * @type {?string}
      */
     this.token = null;
-
+    
+ 
+    /**
+     * The client user
+     * @type {?ClientUser}
+     */
+     this.user = null;
+     
     /**
      * The time at which the client was ready 
      * @type {?Date}
@@ -68,6 +75,7 @@ class Client extends BaseClient {
     if (!token || typeof token != 'string') throw new Error('NO TOKEN OR INVALID TOKEN PROVIDED');
     this.debug(`Provided token ${token}`);
     this.token = token;
+    this.fetchApplication();
     try {
       await this.trackUpdates();
     } catch (err) {
@@ -85,7 +93,10 @@ class Client extends BaseClient {
 
   fetchApplication() {
     return this.api.getMe.get()
-      .then((res) => new User(res));
+      .then((res) => {
+        this.user = new ClientUser(res);
+        return this.user;
+      });
   };
 
 

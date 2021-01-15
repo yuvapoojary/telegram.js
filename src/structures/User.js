@@ -52,33 +52,8 @@ class User extends Base {
        * The language of the user
        * @type {?string}
        */
-      this.language = data.language_code;
+      this.language = data.languageCode;
     }
-
-    if ('can_join_groups' in data) {
-      /** 
-       * Whether the bot can be invited by anyone or not
-       * @type {?boolean}
-       */
-      this.invitable = Boolean(data.can_join_groups);
-    }
-
-    if ('can_read_all_group_messages' in data) {
-      /** 
-       * Whether the bot is in privacy mode or not
-       * @type {?boolean}
-       */
-      this.privacyEnabled = Boolean(data.can_read_all_group_messages);
-    }
-
-    if ('supports_inline_queries' in data) {
-      /** 
-       * Whether the bot supports inline queries or not
-       * type {?boolean}
-       */
-      this.supportsIq = Boolean(data.supports_inline_queries);
-    }
-
 
   }
 
