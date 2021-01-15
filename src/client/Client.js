@@ -20,20 +20,20 @@ class Client extends BaseClient {
      * The polling client used to get updates from telegram API
      * @type {PollingClient}
      */
-    this.polling = new PollingClient(this);
+    //this.polling = new PollingClient(this);
 
     /**
      * The webhook client used to get updates from telegram API
      * @type {WebhookClient}
      */
-    this.webhook = new WebhookClient(this);
+    //this.webhook = new WebhookClient(this);
 
     /**
      * The action manager of the client
      * @type {ActionManager}
      * @private
      */
-    this.actions = new ActionManager(this);
+   // this.actions = new ActionManager(this);
 
     /**
      * The token of the bot to authorize with API
