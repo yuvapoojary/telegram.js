@@ -61,7 +61,7 @@ class BaseClient extends EventEmitter {
   
   
   _processUpdate(data) {
-    this.client.emit('raw', data);
+    this.emit('raw', data);
     
   };
   /**
