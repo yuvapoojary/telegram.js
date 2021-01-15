@@ -8,7 +8,7 @@ class PollingClient {
     this.options = client.options;
     this.lastUpdate = null;
     this.lastRequest = null;
-    this.offset = client.options.pollingOffset;
+    this.offset = client.options.pollingOffset || 0;
     this.interval = client.options.interval || 1000;
     this.pollTimeout = null;
     
@@ -30,9 +30,15 @@ class PollingClient {
   }
 
   poll() {
-    this.client.getUpdates()
+    this.client.getUpdates({
+      offset: this.offset
+    })
       .then((res) => {
-          this.client._processUpdate(res);
+        this.offset = res[res.length - 1].update_id + 1;
+        for(const data of res) {
+          this.client._processUpdate(data);
+        };
+        
       })
       .catch((err) => {
         if (err.status == 409) {
