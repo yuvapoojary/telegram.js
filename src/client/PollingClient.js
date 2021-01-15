@@ -44,6 +44,7 @@ class PollingClient {
         
       })
       .catch((err) => {
+        console.log(err.status);
         if(err.status == 404) return;
         if (err.status == 409) {
           return this.client.removeWebhook()
