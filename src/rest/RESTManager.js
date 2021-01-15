@@ -33,4 +33,4 @@ const APIRequest = require('./APIRequest');
     
  }
  
- module.exports = RestHandler;
+ module.exports = RESTManager;
