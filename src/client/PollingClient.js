@@ -50,4 +50,6 @@ class PollingClient {
       });
   }
 
-}
+};
+
+module.exports = PollingClient;
