@@ -1,4 +1,5 @@
 const BaseClient = require('./BaseClient');
+const User = require('./structures/User');
 
 /**
  * The main hub for interacting with telegram API
