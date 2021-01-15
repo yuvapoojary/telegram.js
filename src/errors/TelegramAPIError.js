@@ -33,7 +33,7 @@ class TelegramAPIError extends Error {
      * The HTTP status code
      * @type {number}
      */
-    this.httpStatus = status;
+    this.status = status;
   }
 
   /**
