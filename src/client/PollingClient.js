@@ -32,9 +32,7 @@ class PollingClient {
   poll() {
     this.client.getUpdates()
       .then((res) => {
-        for (const data of res.result) {
-          this.client._processUpdate(data);
-        }
+          this.client._processUpdate(res.result);
       })
       .catch((err) => {
         if (err.status == 409) {
