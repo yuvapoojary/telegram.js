@@ -1,7 +1,7 @@
 const telegram = require('./src/client/Client');
 
 const bot = new telegram ({
-  ApiURL: 'https://api.telegram.com'
+  ApiURL: 'https://api.telegram.org'
 });
 
 bot.login(process.env.ttoken);
