@@ -31,11 +31,11 @@ class PollingClient {
 
   poll() {
     console.log(this.offset);
-    this.client.getUpdates({
+    this.client.getUpdates(this.offset && ({
       data: {
         offset: this.offset
       }
-    })
+    }))
       .then((res) => {
         this.offset = res[res.length - 1].update_id + 1;
         for(const data of res) {
