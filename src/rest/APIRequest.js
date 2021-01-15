@@ -24,6 +24,7 @@ class APIRequest {
   make() {
     const url = `${this.rest.endpoint}/${this.rest.getAuth()}/${this.path}?${this.querystring && this.querystring}`;
     this.url = url;
+    console.log(url);
     let headers = {};
 
     let body;
