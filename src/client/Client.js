@@ -111,6 +111,6 @@ class Client extends BaseClient {
   };
 
 
-}
+};
 
 module.exports = Client;
