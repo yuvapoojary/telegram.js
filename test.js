@@ -1,6 +1,6 @@
 const telegram = require('./src/client/Client');
 const Message = require('./src/structures/Message');
-
+console.log(typeof Message);
 const bot = new telegram ({
   ApiURL: 'https://api.telegram.org'
 });
