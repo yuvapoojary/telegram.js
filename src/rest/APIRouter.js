@@ -8,14 +8,11 @@ function APIRouter(manager) {
     get(target, name) {
       console.log(route, name);
       if (method.includes(name)) {
-        return options => {
-          console.log(options);
-          return manager.request(
+        return options => manager.request(
             name,
             route.join('/'),
-            options
+            options || {}
           );
-        }
       };
 
       route.push(name);
