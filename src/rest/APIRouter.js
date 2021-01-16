@@ -3,11 +3,12 @@ const method = ['get', 'post', 'put', 'patch', 'delete'];
 
 
 function APIRouter(manager) {
-  const route = [];
+  const route = [''];
   const handler = {
     get(target, name) {
       console.log(route, name);
       if (method.includes(name)) {
+        console.log(options);
         return options => manager.request(
           name,
           route.join('/'),
