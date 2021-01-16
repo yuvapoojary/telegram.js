@@ -50,6 +50,13 @@ class Message extends Base {
     return (this.editedAt ? true : false);
   };
 
+  reply(content, options) {
+    return this.chat.send(content, {
+      ...options,
+      reply_to_message_id: this.id
+    })
+  };
+
 };
 
 module.exports = Message;

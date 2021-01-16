@@ -18,8 +18,6 @@ bot.on('debug', console.log);
 bot.startPolling();
 
 bot.on('dm', (msg) => {
-  msg.chat.send(msg.content, {
-    reply_to_message_id: msg.id
-  })
+  msg.reply(msg.content)
   .then(console.log).catch(console.error);
 });
