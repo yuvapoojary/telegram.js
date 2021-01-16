@@ -14,7 +14,7 @@ class Message extends Base {
     super(client);
     this.client = client;
     this._patch(data);
-  }
+  };
 
   _patch(data) {
     this.id = data.message_id;
@@ -51,6 +51,5 @@ class Message extends Base {
   };
 
 };
-
 
 module.exports = Message;

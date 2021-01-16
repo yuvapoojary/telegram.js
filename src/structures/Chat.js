@@ -34,7 +34,8 @@ class Chat extends Base {
       }
     })
     .then((data) => {
-     console.log(typeof Message);
+      const msg = new Message(data);
+      if(msg) return msg;
     });
   };
   

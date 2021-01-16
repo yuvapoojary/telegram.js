@@ -10,7 +10,7 @@ bot.login(process.env.ttoken);
 bot.fetchApplication().then(console.log);
 
 bot.on('raw',(data) =>  {
-  const msg = new Message(bot, data.message);
+  const msg = new Message(bot, data.message || data.channel_post);
   if(msg.chat.type == 'private') bot.emit('dm', msg);
 });
 
