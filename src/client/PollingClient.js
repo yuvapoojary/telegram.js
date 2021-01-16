@@ -11,7 +11,7 @@ class PollingClient {
     this.offset = client.options.pollingOffset || null;
     this.interval = client.options.interval || 1000;
     this.pollTimeout = null;
-    
+
   }
 
   start() {
@@ -33,22 +33,22 @@ class PollingClient {
     console.log(this.offset);
     this.client.getUpdates(this.offset && ({
         offset: this.offset
-    }))
+      }))
       .then((res) => {
-        this.offset = res[res.length - 1].update_id + 1;
-        for(const data of res) {
+       if(res.length) this.offset = res[res.length - 1].update_id + 1;
+        for (const data of res) {
           this.client._processUpdate(data);
         };
-        
+
       })
       .catch((err) => {
         console.log(err);
-        if(err.status == 404) return;
+        if (err.status == 404) return;
         if (err.status == 409) {
           return this.client.removeWebhook()
             .then(() => this.poll());
         };
-       throw err;
+        throw err;
       })
       .finally(() => {
         this.pollTimeout = setTimeout(() => {
