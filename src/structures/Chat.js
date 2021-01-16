@@ -1,6 +1,6 @@
 const Base = require('./Base');
 const Message = require('./Message');
-
+console.log(Message);
 /** 
  * Represents chat 
  * extends {Base}
