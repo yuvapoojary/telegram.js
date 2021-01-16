@@ -32,10 +32,7 @@ class Chat extends Base {
         ...options
       }
     })
-    .then((data) => {
-      const msg = new Msg(data);
-      if(msg) return msg;
-    });
+    .then((data) => new (require('./Message'))(this.client, data));
   };
   
 };
