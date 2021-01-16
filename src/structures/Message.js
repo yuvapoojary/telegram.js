@@ -56,6 +56,57 @@ class Message extends Base {
       reply_to_message_id: this.id
     })
   };
+  
+  forward(chatId, silent = false) {
+    return this.client.api.forwardMessage.post({
+      data: {
+        chat_id: chatId,
+        from_chat_id: this.chat.id,
+        message_id: this.id,
+        disable_notification: silent
+      }
+    })
+    .then((data) => new Message(this.client, data));
+  };
+  
+  copy(chatId, options = {}) {
+    return this.client.api.copyMessage.post({
+      data: {
+        chat_id: chatId,
+        from_chat_id: this.chat.id,
+        message_id: this.id,
+        ...options
+      }
+    });
+  };
+  
+  pin(silent = false) {
+    return this.client.api.pinChatMessage.post({
+      data: {
+        chat_id: this.chat.id,
+        message_id: this.id,
+        disable_notification: silent
+      }
+    });
+  };
+  
+  unpin() {
+    return this.client.api.unpinChatMessage.post({
+      data: {
+        chat_id: this.chat.id,
+        message_id: this.id
+      }
+    });
+  };
+  
+  delete() {
+     return this.client.api.deleteMessage.post({
+       data: {
+         chat_id: this.chat.id,
+         message_id: this.id
+       }
+     });
+  };
 
 };
 

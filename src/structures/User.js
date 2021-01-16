@@ -58,6 +58,16 @@ class User extends Base {
     }
 
   }
+  
+  getPhotos(offset = 0, limit = 100) {
+     return this.client.api.getPhotos().get({
+       data: {
+         user_id: this.id,
+         limit,
+         offset
+       }
+     });
+  };
 
 };
 

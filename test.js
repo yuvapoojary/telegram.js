@@ -20,5 +20,5 @@ bot.startPolling();
 
 bot.on('dm', (msg) => {
   msg.reply(msg.content)
-  .then(console.log).catch(console.error);
+  .then(() => msg.delete()).catch(console.error);
 });
