@@ -2,7 +2,7 @@ const https = require('https');
 const fetch = require('node-fetch');
 const FormData = require('@discordjs/form-data');
 
-if(https.agent) var agent = new https.agent({ keepAlive: true });
+if (https.agent) var agent = new https.agent({ keepAlive: true });
 
 class APIRequest {
   constructor(rest, method, path, options) {
@@ -11,8 +11,7 @@ class APIRequest {
     this.path = path;
     this.options = options;
     this.querystring = '';
-    
-    console.log(options);
+
     if (options.query) {
       const query = Object.entries(options.query)
         .filter(([, value]) => value !== null && typeof value !== 'undefined')
@@ -23,7 +22,7 @@ class APIRequest {
   };
 
   make() {
-    const url = `${this.rest.endpoint}/${this.rest.getAuth()}/${this.path}?${this.querystring && this.querystring}`;
+    const url = `${this.rest.endpoint}/${this.rest.getAuth()}${this.path}?${this.querystring && this.querystring}`;
     this.url = url;
     let headers = {};
 
@@ -33,17 +32,17 @@ class APIRequest {
       for (const file of this.options.files)
         if (file && file.file) body.append(file.name, file.file, file.name);
       if (typeof this.options.data !== 'undefined') {
-        for(const key in this.options.data) {
+        for (const key in this.options.data) {
           body.append(key, this.options.data[key]);
         };
       };
       headers = Object.assign(headers, body.getHeaders());
-  
+
     } else if (this.options.data != null) {
       body = JSON.stringify(this.options.data);
       headers['Content-Type'] = 'application/json';
     };
-    
+
 
     return fetch(url, {
       headers,

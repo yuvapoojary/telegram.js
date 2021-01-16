@@ -27,7 +27,7 @@ class TelegramAPIError extends Error {
      * HTTP error code returned by Discord
      * @type {number}
      */
-    this.code = error.code;
+    this.code = error.error_code;
 
     /**
      * The HTTP status code

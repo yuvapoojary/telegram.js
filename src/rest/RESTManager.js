@@ -36,7 +36,7 @@ class RESTManager {
     if (res.ok && result.ok) return result.result;
 
     if (!result.ok) {
-      throw new TelegramAPIError(path, result, `/${method}`, res.status);
+      throw new TelegramAPIError(path, result, `${method}`, res.status);
     };
 
   }
