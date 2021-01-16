@@ -33,7 +33,7 @@ class Message extends Base {
       this.content = null;
     };
     
-    this.chat = new DmChat(data.chat);
+    this.chat = new DmChat(this.client, data.chat);
     
   };
 
