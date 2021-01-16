@@ -20,4 +20,5 @@ bot.startPolling();
 bot.on('dm', (msg) => {
   console.log(msg);
   msg.chat.send('Hello testing it')
+  .then(console.log).catch(console.error);
 });

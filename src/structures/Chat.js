@@ -11,7 +11,6 @@ class Chat extends Base {
    */
   constructor(client, data) {
     super(client, data);
-console.log(client);
     this.client = client;
     this.type = data.type;
     if(data) this._patch(data);
@@ -26,7 +25,7 @@ console.log(client);
   };
   
   send(content, options = {}) {
-    this.client.api.sendMessage({
+    return this.client.api.sendMessage({
       data: {
         chat_id: this.id,
         text: content,
