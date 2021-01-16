@@ -25,7 +25,7 @@ class Chat extends Base {
   };
   
   send(content, options = {}) {
-    return this.client.api.sendMessage({
+    return this.client.api.sendMessage.post({
       data: {
         chat_id: this.id,
         text: content,
