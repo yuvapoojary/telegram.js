@@ -25,7 +25,12 @@ class APIRequest {
     const url = `${this.rest.endpoint}/${this.rest.getAuth()}${this.path}?${this.querystring && this.querystring}`;
     this.url = url;
     let headers = {};
-
+    
+    if(this.method === 'get') return fetch(url, {
+      method: this.method,
+      agent,
+    });
+    
     let body;
     if (this.options.files && this.options.files.length) {
       body = new FormData();
