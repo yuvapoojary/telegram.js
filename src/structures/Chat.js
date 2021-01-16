@@ -10,7 +10,7 @@ class Chat extends Base {
    * @param {Message} message The message that is belongings to this chat
    */
   constructor(client, data) {
-    super(client);
+    super(client, data);
 
     this.type = data.type;
     if(data) this._patch(data);

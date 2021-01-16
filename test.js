@@ -10,7 +10,7 @@ bot.login(process.env.ttoken);
 bot.fetchApplication().then(console.log);
 
 bot.on('raw',(data) =>  {
-  console.log(new Message(bot, data));
+  console.log(new Message(bot, data.message));
 });
 
 bot.on('debug', console.log);
