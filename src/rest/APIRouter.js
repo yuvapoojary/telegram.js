@@ -10,7 +10,7 @@ function APIRouter(manager) {
       if (method.includes(name)) {
         return options => {
           console.log(options);
-          manager.request(
+          return manager.request(
             name,
             route.join('/'),
             options
