@@ -1,4 +1,5 @@
 const Base = require('./Base');
+const Message = require('./Message');
 
 /** 
  * Represents chat 
@@ -32,6 +33,7 @@ class Chat extends Base {
         ...options
       }
     })
+    .then((data) => new Message(this.client, data));
   };
   
 };
