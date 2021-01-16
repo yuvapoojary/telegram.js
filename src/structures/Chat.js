@@ -11,7 +11,8 @@ class Chat extends Base {
    */
   constructor(client, data) {
     super(client, data);
-
+console.log(client);
+this.client = client;
     this.type = data.type;
     if(data) this._patch(data);
   };

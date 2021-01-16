@@ -36,9 +36,11 @@ class Message extends Base {
 
     switch (data.chat.type) {
       case 'private':
-        this.chat = new DmChat(this.client, data.chat);
+        this.chat = new DmChat(this.client, data.chat)
+        break;
       case 'channel':
         this.chat = new ChannelChat(this.client, data.chat);
+        break;
     };
 
   };
