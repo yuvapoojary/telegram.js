@@ -1,6 +1,6 @@
 const Chat = require('./Chat');
 
-class DmChat extends Channel {
+class DmChat extends Chat {
   constructor(client, data) {
     super(client, data);
    
