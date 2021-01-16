@@ -23,7 +23,17 @@ class Chat extends Base {
   fetch() {
     return this.client.api.getChat(this.id);
   };
-
+  
+  send(content, options = {}) {
+    this.client.api.sendMessage({
+      data: {
+        chat_id: this.id,
+        text: content,
+        ...options
+      }
+    })
+  };
+  
 };
 
 module.exports = Chat;

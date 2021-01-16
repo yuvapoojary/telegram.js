@@ -10,8 +10,14 @@ bot.login(process.env.ttoken);
 bot.fetchApplication().then(console.log);
 
 bot.on('raw',(data) =>  {
-  console.log(new Message(bot, data.message));
+  const msg = new Message(bot, data.message);
+  if(msg.chat.type == 'private') bot.emit('dm', msg);
 });
 
 bot.on('debug', console.log);
 bot.startPolling();
+
+bot.on('dm', (msg) => {
+  console.log(msg);
+  msg.chat.send('Hello testing it')
+});
