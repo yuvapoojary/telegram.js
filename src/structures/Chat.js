@@ -1,7 +1,4 @@
-const Message = require('./Message');
-console.log(typeof Message);
 const Base = require('./Base');
-console.log(typeof Message);
 /** 
  * Represents chat 
  * extends {Base}
@@ -27,6 +24,7 @@ class Chat extends Base {
   };
   
   send(content, options = {}) {
+    const Msg = require('./Message');
     return this.client.api.sendMessage.post({
       data: {
         chat_id: this.id,
@@ -35,7 +33,7 @@ class Chat extends Base {
       }
     })
     .then((data) => {
-      const msg = new Message(data);
+      const msg = new Msg(data);
       if(msg) return msg;
     });
   };
