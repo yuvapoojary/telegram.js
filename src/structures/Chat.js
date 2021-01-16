@@ -1,5 +1,7 @@
 const Message = require('./Message');
+console.log(typeof Message);
 const Base = require('./Base');
+console.log(typeof Message);
 /** 
  * Represents chat 
  * extends {Base}
