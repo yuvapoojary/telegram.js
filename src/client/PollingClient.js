@@ -35,7 +35,7 @@ class PollingClient {
         offset: this.offset
       }))
       .then((res) => {
-       if(res.length) this.offset = res[res.length - 1].update_id + 1;
+        if (res.length) this.offset = res[res.length - 1].update_id + 1;
         for (const data of res) {
           this.client._processUpdate(data);
         };
