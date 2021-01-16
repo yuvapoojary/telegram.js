@@ -11,6 +11,7 @@ bot.fetchApplication().then(console.log);
 
 bot.on('raw',(data) =>  {
   const msg = new Message(bot, data.message || data.channel_post);
+  console.log(!msg.chat && data);
   if(msg.chat.type == 'private') bot.emit('dm', msg);
 });
 
