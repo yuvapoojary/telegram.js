@@ -12,6 +12,7 @@ const ChannelChat = require('./ChannelChat');
 class Message extends Base {
   constructor(client, data) {
     super(client);
+    this.client = client;
     this._patch(data);
   }
 
