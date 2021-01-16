@@ -34,7 +34,7 @@ class Chat extends Base {
       }
     })
     .then((data) => {
-      return new Message(this.client, data);
+     console.log(typeof Message);
     });
   };
   

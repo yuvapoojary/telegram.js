@@ -30,7 +30,6 @@ class PollingClient {
   }
 
   poll() {
-    console.log(this.offset);
     this.client.getUpdates(this.offset && ({
         offset: this.offset
       }))
