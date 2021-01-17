@@ -1,8 +1,8 @@
 const Base = require('./Base');
 const User = require('./User');
 const ClientUser = require('./ClientUser');
-const DmChat = require('./DmChat');
-const ChannelChat = require('./ChannelChat');
+const Chat = require('./Chat');
+const ChatMember = require('./ChatMember');
 
 /**
  * Represents message
@@ -35,14 +35,9 @@ class Message extends Base {
       this.content = null;
     };
 
-    switch (data.chat.type) {
-      case 'private':
-        this.chat = new DmChat(this.client, data.chat)
-        break;
-      case 'channel':
-        this.chat = new ChannelChat(this.client, data.chat);
-        break;
-    };
+    this.chat = new Chat(this.client, data.chat);
+    
+    this.member = new ChatMember(this.client, this.chat.id, { user: data.from });
 
   };
 

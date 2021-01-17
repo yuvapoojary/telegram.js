@@ -2,12 +2,15 @@ const Base = require('./Base');
 const User = require('./User');
 
 class ChatMember extends Base {
-  constructor(client, chat, data) {
+  constructor(client, chatId, data) {
+    super(client);
+
     this.client = client;
-    this.chat = chat;
 
-    this.id = chat.user.id;
-
+    this.id = data.user.id
+    
+    this.chatID = chatId;
+    
     if ('user' in data) {
       this.user = new User(this.client, data.user);
     };
@@ -38,19 +41,19 @@ class ChatMember extends Base {
   fetch() {
     return this.client.api.getChatMember
       .get({
-        data: {
-          chat_id: this.chat.id,
-          user_id: this.chat.user.id
+        query: {
+          chat_id: this.chatID,
+          user_id: this.id
         }
       })
-      .then((data) => new ChatMember(this.client, this.chat, data));
+      .then((data) => new ChatMember(this.client, this.chatID, data));
   };
 
 
   restrict(perms, untilDate) {
     return this.client.api.restrictChatMember.post({
       data: {
-        chat_id: this.chat.id,
+        chat_id: this.chatID,
         user_id: this.id,
         permissions: perms,
         until_date: untilDate
@@ -58,25 +61,28 @@ class ChatMember extends Base {
     });
   };
 
+
   promote(perms) {
     return this.client.api.promoteChatMember.post({
       data: {
-        chat_id: this.chat.id,
+        chat_id: this.chatID,
         user_id: this.id,
         ...perms
       }
     })
   };
 
+
   setNickName(name) {
     return this.client.api.setChatAdministratorCustomTitle.post({
       data: {
-        chat_id: this.chat.id,
+        chat_id: this.chatID,
         user_id: this.id,
         custom_title: name
       }
     })
   };
+
 
 };
 

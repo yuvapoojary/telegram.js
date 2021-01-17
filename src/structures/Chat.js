@@ -55,8 +55,22 @@ class Chat extends Base {
 
   };
 
+  me() {
+    return this.client.api.getChatMember.get({
+        query: {
+          chat_id: this.id,
+          user_id: this.client.user.id
+        }
+      })
+      .then((data) => new ChatMember(this.client, data));
+  };
+
   fetch() {
-    return this.client.api.getChat(this.id)
+    return this.client.api.getChat.get({
+        query: {
+          chat_id: this.id
+        }
+      })
       .then((data) => new Chat(this.client, data));
   };
 
