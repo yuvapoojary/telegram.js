@@ -1,2 +1,2 @@
 # telegram.js
-A powerfull JavaScript library for interacting with discord API
+A powerfull JavaScript library for interacting with telegram API

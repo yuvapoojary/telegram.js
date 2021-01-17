@@ -1,10 +1,10 @@
 {
-  "name": "UHBBBJJG",
-  "version": "1.5.2",
+  "name": "telegram.js",
+  "version": "1.0.0",
   "description": "Object-oriented library",
   "main": "src/index.js",
   "types": "./typings/index.d.ts",
-  "author": "DEF4ULT",
+  "author": "yuvapoojary",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/"
@@ -23,7 +23,7 @@
     "docs": "docgen --source src --custom docs/index.yml --output docs/docs.json",
     "docs:test": "docgen --source src --custom docs/index.yml"
   },
-  "homepage": "https://github.com/DEF4ULT-OP/telegram.js#readme",
+  "homepage": "https://github.com/yuvapojary/telegram.js#readme",
   "dependencies": {
     "@discordjs/form-data": "^3.0.1",
     "jimp": "^0.16.0",
