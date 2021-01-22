@@ -10,14 +10,16 @@ bot.login(process.env.ttoken);
 bot.fetchApplication().then(console.log);
 
 bot.on('raw', async(data) =>  {
+  console.log(JSON.stringify(data, null, 4));
   const msg = new Message(bot, data.message || data.channel_post);
   msg.member = await msg.member.fetch();
-  console.log(JSON.stringify(data, null, 4));
   if(msg.content == 'leave') msg.chat.leave()
 });
 
 bot.on('debug', console.log);
+
 bot.startPolling();
 
-bot.on('dm', (msg) => {
+bot.commands.on('ping', (client, msg, args) => {
+  msg.reply('pong!');
 });

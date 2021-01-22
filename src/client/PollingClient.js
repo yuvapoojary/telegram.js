@@ -1,7 +1,6 @@
 /**
- * The polling client that is used to poll updates from telegram regularly. 
+ * The polling client that is used to poll updates from telegram at specific intervals.
  */
-
 class PollingClient {
   constructor(client) {
     this.client = client
@@ -11,9 +10,11 @@ class PollingClient {
     this.offset = client.options.pollingOffset || null;
     this.interval = client.options.interval || 1000;
     this.pollTimeout = null;
-
   }
 
+  /**
+   * Starts API polling 
+   */
   start() {
     if (this.lastRequest) {
       return false;
@@ -22,12 +23,18 @@ class PollingClient {
     return true;
   };
 
+  /**
+   * Stops polling if running
+   */
   stop() {
+    this.client.clearTimeout(this.pollTimeout);
     if (this.pollTimeout) {
       clearTimeout(this.pollTimeout);
     };
+
     this.lastRequest = null;
-  }
+  };
+
 
   poll() {
     this.client.getUpdates(this.offset && ({
@@ -36,7 +43,7 @@ class PollingClient {
       .then((res) => {
         if (res.length) this.offset = res[res.length - 1].update_id + 1;
         for (const data of res) {
-          this.client._processUpdate(data);
+          this.client.worker._processData(data);
         };
 
       })
@@ -50,7 +57,7 @@ class PollingClient {
         throw err;
       })
       .finally(() => {
-        this.pollTimeout = setTimeout(() => {
+        this.pollTimeout = this.client.setTimeout(() => {
           this.poll();
         }, this.interval);
       });

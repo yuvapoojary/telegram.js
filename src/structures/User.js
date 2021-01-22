@@ -33,29 +33,27 @@ class User extends Base {
      */
     this.bot = Boolean(data.is_bot);
 
-    if ('last_name' in data) {
       /**
        * Last name of the user
        * @type {?string}
        */
-      this.lastName = data.lastName;
-    }
+      this.lastName = data.lastName || null;
+    
 
-    if ('username' in data) {
       /** 
        * Username of the user
        * @type {?string}
        */
-      this.username = data.username;
-    }
+      this.username = data.username || null;
+   
 
-    if ('language_code' in data) {
+   
       /** 
        * The language of the user
        * @type {?string}
        */
-      this.language = data.languageCode;
-    }
+      this.language = data.languageCode || null;
+    
 
   }
   

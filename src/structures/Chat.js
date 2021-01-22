@@ -1,5 +1,6 @@
 const Base = require('./Base');
 const ChatMember = require('./ChatMember');
+const MessageManager = require('../managers/MessageManager');
 
 /** 
  * Represents chat 
@@ -14,6 +15,7 @@ class Chat extends Base {
     super(client, data);
     this.client = client;
     this.type = data.type;
+    this.messages = new MessageManager(this.client, []);
     if (data) this._patch(data);
   };
 
@@ -55,6 +57,10 @@ class Chat extends Base {
 
   };
 
+  /**
+   * Returns information about the authenticated bot in this chat
+   * @returns {Promise<ChatMember>}
+   */
   me() {
     return this.client.api.getChatMember.get({
         query: {
@@ -65,6 +71,10 @@ class Chat extends Base {
       .then((data) => new ChatMember(this.client, data));
   };
 
+  /**
+   * Fetches the fresh data of chat from telegram API
+   * @returns {Promise<Chat>}
+   */
   fetch() {
     return this.client.api.getChat.get({
         query: {
@@ -74,7 +84,12 @@ class Chat extends Base {
       .then((data) => new Chat(this.client, data));
   };
 
-
+  /**
+   * Send a message to the chat
+   * @param {String} [content] The text to send
+   * @param {MessageOptions} options The message options
+   * @returns {Promise<Message>}
+   */
   send(content, options = {}) {
     const Msg = require('./Message');
     return this.client.api.sendMessage.post({
@@ -88,6 +103,12 @@ class Chat extends Base {
   };
 
 
+  /**
+   * Kicks a member from the chat
+   * @param {String} userId The id of user to kick
+   * @param {Date} [untilDate] The until date 
+   * @returns {Boolean}
+   */
   kick(userId, untilDate) {
     let options = untilDate ? { until_date: untilDate } : {};
     return this.client.api.kickChatMember.post({
@@ -99,7 +120,12 @@ class Chat extends Base {
     })
   };
 
-
+  /**
+   * Unbans a user from the chat
+   * @param {String} userId The id of the user to unban
+   * @param {Boolean} [force=false] If the user is not banned and force is set to true, the user will be kicked.
+   * @returns {Promise<Boolean>}
+   */
   unban(userId, force = false) {
     return this.client.api.unbanChatMembet.post({
       data: {
@@ -109,9 +135,12 @@ class Chat extends Base {
       }
     });
   };
-
-
-
+  
+  /**
+   * Set permissions of chat
+   * @param {Array} perms The permission to allow
+   * @returns {Promise<Boolean>}
+   */
   setPermissions(perms) {
     return this.client.api.setChatPermissions.post({
       data: {
@@ -120,15 +149,22 @@ class Chat extends Base {
       }
     })
   };
-
-
+  
+  /**
+   * Creates an invite link of chat
+   * @returns {Promise<String>}
+   */
   createInvite() {
     return this.client.api.exportChatInviteLink.post({
       chat_id: this.id
     });
   };
-
-
+  
+  /**
+   * Sets title of chat
+   * @param {String} title The title to set
+   * @returns {Promise<Boolean>}
+   */
   setTitle(title) {
     return this.client.api.setChatTitle.post({
       data: {

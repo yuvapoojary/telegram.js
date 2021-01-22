@@ -1,9 +1,12 @@
 const BaseClient = require('./BaseClient');
 const PollingClient = require('./PollingClient');
 const ClientUser = require('../structures/ClientUser');
+const ChatManager = require('../managers/ChatManager');
+const CommandManager = require('../structures/CommandManager');
+const Worker = require('../structures/Worker');
 
 /**
- * The main hub for interacting with telegram API
+ * The main hub for interacting with telegram Bot API
  * @extends {BaseClient}
  */
 class Client extends BaseClient {
@@ -19,6 +22,18 @@ class Client extends BaseClient {
     this.options = options;
 
     /**
+     * The command manager of the client
+     * @type {CommandManager}
+     */
+    this.commands = new CommandManager(this);
+
+    /**
+     * The worker of the client
+     * @type {Worker}
+     */
+    this.worker = new Worker(this);
+
+    /**
      * The polling client used to get updates from telegram API
      * @type {PollingClient}
      */
@@ -31,11 +46,10 @@ class Client extends BaseClient {
     //this.webhook = new WebhookClient(this);
 
     /**
-     * The action manager of the client
-     * @type {ActionManager}
-     * @private
+     * The chat manager of the client
+     * @type {ChatManager}
      */
-    // this.actions = new ActionManager(this);
+    this.chats = new ChatManager(this, []);
 
     /**
      * The token of the bot to authorize with API
@@ -71,19 +85,17 @@ class Client extends BaseClient {
   /**
    * Logs the client in and starts receiving events.
    *  @param {string} [token=this.token] Token of the bot to log in with
-   * returns {Promise<string>} Token of the bot used
+   *  @returns {Promise<string>} Token of the bot used
    */
   async login(token = this.token) {
     if (!token || typeof token != 'string') throw new Error('NO TOKEN OR INVALID TOKEN PROVIDED');
     this.debug(`Provided token ${token}`);
     this.token = token;
-    this.fetchApplication();
-    try {
-      await this.trackUpdates();
-    } catch (err) {
 
-    };
-
+    await this.fetchApplication();
+    this.readyAt = Date.now();
+    this.emit('ready');
+    await this.trackUpdates();
   };
 
   startPolling() {
@@ -96,7 +108,11 @@ class Client extends BaseClient {
   async trackUpdates() {
 
   };
-
+  
+  /**
+   * Fetches the authenticated bot's information
+   * @returns {Promise<ClientUser>}
+   */
   fetchApplication() {
     return this.api.getMe.get()
       .then((res) => {
@@ -104,8 +120,11 @@ class Client extends BaseClient {
         return this.user;
       });
   };
-
-
+  
+  /**
+   * Get latest updates from telegram API
+   * @returns {Promise}
+   */
   getUpdates(data) {
     return this.api.getUpdates().get({
       query: data
