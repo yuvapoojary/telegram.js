@@ -1,13 +1,13 @@
-const Collection = require('@discordjs/collection');
+const Collection = require('../utils/Collection');
 
 /**
  * Base Manager which holds the caches/collections
  */
 class BaseManager {
-  constructor(client, iterator, holds, ...cacheOptions) {
+  constructor(client, iterator, holds, cacheSize) {
     Object.defineProperty(this, 'client', { value: client });
 
-    this.cache = new Collection(...cacheOptions);
+    this.cache = new Collection(cacheSize);
   };
 
   add(data, { id, extras: [] }) {

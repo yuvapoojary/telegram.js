@@ -9,7 +9,7 @@ const ChatMember = require('../structures/ChatMember');
  */
 class ChatManager extends BaseManager {
   constructor(client, iterable) {
-    super(client, iterable, Chat);
+    super(client, iterable, Chat, client.options.chatCacheMaxSize);
   };
 
   /**

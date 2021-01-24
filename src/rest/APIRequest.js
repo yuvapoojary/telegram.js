@@ -1,6 +1,7 @@
 const https = require('https');
 const fetch = require('node-fetch');
 const FormData = require('@discordjs/form-data');
+const Util = require('../util/Util');
 
 if (https.agent) var agent = new https.agent({ keepAlive: true });
 
@@ -21,7 +22,7 @@ class APIRequest {
 
   };
 
-  make() {
+  async make() {
     const url = `${this.rest.endpoint}/${this.rest.getAuth()}${this.path}?${this.querystring && this.querystring}`;
     this.url = url;
     let headers = {};
@@ -35,7 +36,7 @@ class APIRequest {
     if (this.options.files && this.options.files.length) {
       body = new FormData();
       for (const file of this.options.files)
-        if (file && file.file) body.append(file.name, file.file, file.name);
+        if (file && file.file) body.append(file.name, await Util.resolveBuffer(file.file), file.name);
       if (typeof this.options.data !== 'undefined') {
         for (const key in this.options.data) {
           body.append(key, this.options.data[key]);

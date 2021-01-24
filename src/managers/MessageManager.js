@@ -7,7 +7,7 @@ const Message = require('../structures/Message');
  */
 class MessageManager extends BaseManager {
   constructor(client, iterable) {
-    super(client, iterable, Message);
+    super(client, iterable, Message, client.options.messageCacheMaxSize)
   };
 
   /**

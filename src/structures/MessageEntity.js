@@ -1,21 +1,75 @@
 const Base = require('./Base');
-const Collection = require('@discordjs/collection');
+const Collection = require('../util/Collection');
 const User = require('./User');
 
-class MessageEntity extends Base {
+/**
+ * Entities parsed from {@link Message}
+ */
+class MessageEntity {
   constructor(message, data = []) {
-    super(message.client);
 
+    /**
+     * Any users that were mentioned
+     * @type {Collection<number, User} 
+     */
     this.users = new Collection();
+
+    /**
+     * Any mentions that were mentioned using their username
+     * @type {Collection<string, Entity}
+     */
     this.mentions = new Collection();
+
+    /**
+     * Any hashtags(#) that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.hashtags = new Collection();
+
+    /**
+     * Any cashtags($) that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.cashtags = new Collection();
+
+    /**
+     * Any commands(/command) that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.commands = new Collection();
+
+    /**
+     * Any urls that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.urls = new Collection();
+
+    /**
+     * Any emails that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.emails = new Collection();
+
+    /**
+     * Any phonenumbers that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.phoneNumbers = new Collection();
+
+    /**
+     * Any hyperlinks that were mentioned
+     * @type {Collection<string, Entity}
+     */
     this.links = new Collection();
+
+
     this._patch(message, data);
+
+    /**
+     * Get raw data of entities
+     * @function
+     * @name MessageEntity#getRaw
+     */
     this.getRaw = () => data;
   };
 
@@ -25,9 +79,9 @@ class MessageEntity extends Base {
         return this.users.set(entity.user.id, new User(message.client, entity.user));
       };
       const sliced = message.content.slice(entity.offset, 0);
-     
+
       entity.id = message.content.slice(entity.offset, -(sliced.length - entity.length));
-      
+
       switch (entity.type) {
         case 'mention':
           this.mentions.set(entity.id, entity);

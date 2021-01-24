@@ -10,10 +10,13 @@ const Location = require('./Location');
  * Represents message
  * extends {Base}
  */
-
 class Message extends Base {
   constructor(client, data) {
     super(client);
+    
+    /**
+     * The instantiated client
+     */
     this.client = client;
     if(data) this._patch(data);
   };

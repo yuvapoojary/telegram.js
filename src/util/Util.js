@@ -1,7 +1,7 @@
 const fs = require('fs');
 const stream = require('stream');
 const fetch = require('node-fetch');
-
+const path = require('path');
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
 /**
@@ -52,7 +52,7 @@ class Util {
    * @param {BufferResolvable|Stream} resource The buffer or stream resolvable to resolve
    * @returns {Promise<Buffer|Stream>}
    */
-  static async resolveFile(resource) {
+  static async resolveBuffer(resource) {
     if (Buffer.isBuffer(resource)) return resource;
     if (resource instanceof stream.Readable) return resource;
 

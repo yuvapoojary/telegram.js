@@ -1,14 +1,22 @@
 const Message = require('./Message');
 
+/**
+ * Represents the worker structure
+ */
 class Worker {
   constructor(client) {
     this.client = client;
   };
 
+  /**
+   * Process the data from telegram API
+   * @param {Object} data
+   * @see {https://core.telegram.org/bots/api#update|Telegram Bot API}
+   */
   _processData(data) {
     if (data.message || data.channel_post) this.onMessage(data.message || data.channel_post);
     if (data.edited_message || data.edited_channel_post) this.onMessageEdit(data);
-    this.emit('raw', data);
+    this.client.emit('raw', data);
   };
 
   onMessage(data) {

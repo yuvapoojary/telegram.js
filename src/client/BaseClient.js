@@ -3,7 +3,7 @@
 require('setimmediate');
 const EventEmitter = require('events');
 const RestManager = require('../rest/RESTManager');
-const { DefaultOptions } = require('../util/Constants');
+const { ClientOptions } = require('../util/Constants');
 const Util = require('../util/Util');
 
 /**
@@ -39,7 +39,7 @@ class BaseClient extends EventEmitter {
      * The options the client was instantiated with
      * @type {ClientOptions}
      */
-    this.options = Util.mergeDefault(DefaultOptions, options);
+    this.options = Util.mergeDefault(ClientOptions, options);
 
     /**
      * The Rest manager of the client

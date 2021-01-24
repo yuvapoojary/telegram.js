@@ -1,6 +1,7 @@
 const Base = require('./Base');
 const ChatMember = require('./ChatMember');
 const MessageManager = require('../managers/MessageManager');
+const ChatMemberManager = require('../managers/ChatMemberManager');
 
 /** 
  * Represents chat 
@@ -13,9 +14,15 @@ class Chat extends Base {
    */
   constructor(client, data) {
     super(client, data);
+
     this.client = client;
+
     this.type = data.type;
-    this.messages = new MessageManager(this.client, []);
+
+    this.messages = new MessageManager(this.client);
+
+    this.members = new ChatMemberManager(this.client);
+
     if (data) this._patch(data);
   };
 
@@ -135,7 +142,7 @@ class Chat extends Base {
       }
     });
   };
-  
+
   /**
    * Set permissions of chat
    * @param {Array} perms The permission to allow
@@ -149,7 +156,7 @@ class Chat extends Base {
       }
     })
   };
-  
+
   /**
    * Creates an invite link of chat
    * @returns {Promise<String>}
@@ -159,7 +166,7 @@ class Chat extends Base {
       chat_id: this.id
     });
   };
-  
+
   /**
    * Sets title of chat
    * @param {String} title The title to set
@@ -174,7 +181,11 @@ class Chat extends Base {
     });
   };
 
-
+  /**
+   * Set description of the chat
+   * @param {String} description 
+   * @returns {Promise<Boolean>}
+   */
   setDescription(description) {
     return this.client.api.setChatDescription.post({
       data: {
@@ -184,17 +195,26 @@ class Chat extends Base {
     });
   };
 
-
-  setPhoto(photo) {
+  /**
+   * Set photo of the chat
+   * @param {BufferResolvable} [photo]
+   * @param {MessageOptions} options
+   * @returns {Promise<Boolean>}
+   */
+  setPhoto(photo, options = {}) {
     return this.client.api.setChatPhoto.post({
       data: {
-        chat_id: this.id
+        chat_id: this.id,
+        ...options
       },
-      files: [{ name: photo, value: photo }]
+      files: photo ? [{ name: 'photo', file: photo }] : null
     });
   };
 
-
+  /**
+   * Delets chats photo
+   * @returns {Promise<Boolean>}
+   */
   deletePhoto() {
     return this.client.api.deleteChatPhoto({
       data: {
@@ -203,7 +223,10 @@ class Chat extends Base {
     });
   };
 
-
+  /**
+   * Unpins all messages
+   * @returns {Promise<Boolean>}
+   */
   unpinAllMessages() {
     return this.client.api.unpinAllChatMessages.post({
       data: {
@@ -212,7 +235,10 @@ class Chat extends Base {
     });
   };
 
-
+  /**
+   * Leaves bot from the chat
+   * @returns {Promise<Boolean>}
+   */
   leave() {
     return this.client.api.leaveChat.post({
       data: {
@@ -221,7 +247,10 @@ class Chat extends Base {
     });
   };
 
-
+  /**
+   * Get list og chat admins
+   * @returns {Promise<Array<ChatMember>>}
+   */
   getAdmins() {
     return this.client.api.getChatAdministrators.get({
         query: {
@@ -233,7 +262,10 @@ class Chat extends Base {
       });
   };
 
-
+  /**
+   * Returns member count of the chat
+   * @returns {Promise<number>}
+   */
   membersCount() {
     return this.client.api.getChatMembersCount.get({
       query: {
@@ -242,6 +274,11 @@ class Chat extends Base {
     });
   };
 
+  /**
+   * Add sticker set
+   * @param {string} name Name of sticker set to add
+   * @returns {Promise<Boolean>}
+   */
   addStickerSet(name) {
     return this.client.api.setChatStickerSet.post({
       data: {
@@ -251,6 +288,11 @@ class Chat extends Base {
     });
   };
 
+  /**
+   * Remove sticker set
+   * @param {String} name Name of the sticker set to remove
+   * @returns {Promise<Boolean>}
+   */
   removeStickerSet(name) {
     return this.client.api.deleteChatStickerSet.post({
       data: {
