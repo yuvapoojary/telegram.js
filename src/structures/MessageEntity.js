@@ -42,13 +42,13 @@ class MessageEntity {
 
     /**
      * Any urls that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.urls = new Collection();
 
     /**
      * Any emails that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.emails = new Collection();
 
