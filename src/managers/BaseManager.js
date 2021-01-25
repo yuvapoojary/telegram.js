@@ -7,7 +7,6 @@ const User = require('../structures/User')
  */
 class BaseManager {
   constructor(client, iterable, holds, cacheSize) {
-    console.log(holds instanceof User);
     /**
      * The instantiated client 
      * @type {Client}
@@ -28,14 +27,13 @@ class BaseManager {
     this.cache = new Collection(cacheSize);
   };
 
-  add(data, options = {}) {
-    console.log(this.holds);
-    const existing = this.cache.get(options.id || data.id);
+  add(data, { id, extras = [] } = {}) {
+    const existing = this.cache.get(id || data.id);
     if (existing && existing._patch) existing._patch(data);
     if (existing) return existing;
 
-    const entry = new this.holds(this.client, data, ...options.extras);
-    this.cache.set(options.id || entry.id, entry);
+    const entry = new this.holds(this.client, data, ...extras);
+    this.cache.set(id || entry.id, entry);
     return entry;
   };
 

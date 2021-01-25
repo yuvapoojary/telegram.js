@@ -23,7 +23,9 @@ class Worker {
 
   onMessage(data) {
     const msg = new Message(this.client, data);
+    const chat = this.client.chats.cache.get(msg.chat.id);
     this.client.emit('message', msg);
+    if (chat) chat.messages.add(data);
     if (!msg.content || msg.content.indexOf(this.client.commands.prefix) !== 0) return;
     const args = msg.content.slice(this.client.commands.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();

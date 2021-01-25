@@ -25,10 +25,9 @@ class Message extends Base {
      * The id of the message
      * @type {string}
      */
-    this.id = data.id;
+    this.id = data.message_id;
 
     if (data) this._patch(data);
-
   };
 
   _patch(data) {
@@ -50,7 +49,7 @@ class Message extends Base {
        * The author of the message
        * @type {User}
        */
-      this.author = new User(this.client, data.from);
+      this.author = this.client.users.add(data.from);
     } else {
       this.author = null;
     };
@@ -70,13 +69,13 @@ class Message extends Base {
      * The chat the message was sent in
      * @type {Chat}
      */
-    this.chat = this.client.chats.add(data.chat, {});
+    this.chat = this.client.chats.add(data.chat);
 
     /**
      * Represents the author of message as chat member
      * @type {ChatMember}
      */
-    this.member = this.chat.members.add({ user: data.from }, { id: this.author.id });
+    this.member = this.chat.members.add(this.chat.id, { id: data.from.id, extras: [{ user: data.from }] });
 
     /**
      * Represents the special entities that were with the message
@@ -120,29 +119,56 @@ class Message extends Base {
     if ('location' in data) {
       this.location = new Location(data.location);
     };
-
   };
 
+  /**
+   * The timestamp at which the message was edited
+   * @readonly
+   * @type {Date}
+   */
   get edited() {
     return (this.editedAt ? true : false);
   };
 
+  /**
+   * Checks, whether the message is a reply to another message
+   * @readonly
+   * @type {Boolean}
+   */
   get isReply() {
     return this.originalMessage ? true : false;
-  };
+  }
 
+  /**
+   * Checks, whether the message is forwarded
+   * @readonly
+   * @type {Boolean}
+   */
   get isForwarded() {
     if (this.originalMessageId || this.originalMessageChat || this.originalMessageAuthor || this.originalMessageSignature || this.originalMessageSenderName) return true;
     return false;
   };
 
+  /**
+   * Reply to the current message
+   * @param {strin} [content] The text content to replay with
+   * @param {MessageOptions} options
+   * @returns {Message}
+   */
   reply(content, options) {
     return this.chat.send(content, {
-      ...options,
-      reply_to_message_id: this.id
-    })
+        ...options,
+        reply_to_message_id: this.id
+      })
+      .then((data) => this.chat.messages.add(data));
   };
 
+  /**
+   * Forward the message to another chat
+   * @param {number} chatId The id of chat
+   * @param {Boolean} [silent=false] Whether to disable notification or not
+   * @returns {Message}
+   */
   forward(chatId, silent = false) {
     return this.client.api.forwardMessage.post({
         data: {
@@ -155,6 +181,12 @@ class Message extends Base {
       .then((data) => new Message(this.client, data));
   };
 
+  /**
+   * Copy the message to another chat
+   * @param {number} chatId The id of chat
+   * @param {MessageOptions} options
+   * @returns {Message}
+   */
   copy(chatId, options = {}) {
     return this.client.api.copyMessage.post({
       data: {
@@ -165,7 +197,12 @@ class Message extends Base {
       }
     });
   };
-
+  
+  /**
+   * Pin the message in the chat
+   * @param {Boolean} [silent=false] Whether to disable notification 
+   * @returns {Promise<Boolean>}
+   */
   pin(silent = false) {
     return this.client.api.pinChatMessage.post({
       data: {
@@ -176,6 +213,10 @@ class Message extends Base {
     });
   };
 
+  /**
+   * Unpin the message in the chat if pinned
+   * @returns {Promise<Boolean>}
+   */
   unpin() {
     return this.client.api.unpinChatMessage.post({
       data: {
@@ -184,7 +225,11 @@ class Message extends Base {
       }
     });
   };
-
+  
+  /**
+   * Delete the message, requires `can_delete_messages` permission
+   * @returns {Promise<Boolean>}
+   */
   delete() {
     return this.client.api.deleteMessage.post({
       data: {

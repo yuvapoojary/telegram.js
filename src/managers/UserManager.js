@@ -2,7 +2,7 @@
 
 const BaseManager = require('./BaseManager');
 const User = require('../structures/User');
-console.log(User instanceof User);
+
 /**
  * Manages API methods of User and stores their cache
  * @extends {BaseManager}

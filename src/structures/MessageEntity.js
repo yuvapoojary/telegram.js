@@ -12,31 +12,31 @@ class MessageEntity {
 
     /**
      * Any users that were mentioned
-     * @type {Collection<number, User} 
+     * @type {Collection<number, User>} 
      */
     this.users = new Collection();
 
     /**
      * Any mentions that were mentioned using their username
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.mentions = new Collection();
 
     /**
      * Any hashtags(#) that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.hashtags = new Collection();
 
     /**
      * Any cashtags($) that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.cashtags = new Collection();
 
     /**
      * Any commands(/command) that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.commands = new Collection();
 
@@ -54,13 +54,13 @@ class MessageEntity {
 
     /**
      * Any phonenumbers that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.phoneNumbers = new Collection();
 
     /**
      * Any hyperlinks that were mentioned
-     * @type {Collection<string, Entity}
+     * @type {Collection<string, Entity>}
      */
     this.links = new Collection();
 

@@ -19,7 +19,7 @@ class ChatMember extends Base {
 
     /**
      * The instantiated client
-     * @type {Client {
+     * @type {Client}
      * @readonly
      */
     Object.defineProperty(this, 'client', { value: client });
@@ -152,7 +152,7 @@ class ChatMember extends Base {
 
   /**
    * Set custom title for this chat
-   * @type {string} name The new name to set
+   * @param {string} name The new name to set
    * @returns {Promise<Boolean>}
    */
   setNickName(name) {

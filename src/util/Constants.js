@@ -1,5 +1,5 @@
 /**
- * Options for client
+ * Options for a client
  * @typedef {Object} ClientOptions
  * @property {string} [apiURL=https://api.telegram.org] Base url of the telegram api
  * @property {number} [messageCacheMaxSize=200] Maximum number of messages to cache per chat (-1 or Infinity for unlimited)

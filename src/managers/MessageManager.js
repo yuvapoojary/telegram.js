@@ -1,7 +1,7 @@
 'use strict';
 
 const BaseManager = require('./BaseManager');
-const Message = require('../structures/Message');
+let Message;
 
 /**
  * Manages API methods of Message and stores their cache
@@ -9,6 +9,7 @@ const Message = require('../structures/Message');
  */
 class MessageManager extends BaseManager {
   constructor(client, iterable) {
+    if (!Message) Message = require('../structures/Message');
     super(client, iterable, Message, client.options.messageCacheMaxSize)
   };
 
@@ -17,8 +18,6 @@ class MessageManager extends BaseManager {
    * @type {Collection<Message>}
    * @name MessageManager#cache
    */
-   
-   
 };
 
 module.exports = MessageManager;

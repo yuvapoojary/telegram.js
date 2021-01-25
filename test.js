@@ -1,5 +1,6 @@
 const telegram = require('./src/client/Client');
 const Message = require('./src/structures/Message');
+const util = require('util');
 
 const bot = new telegram({
   ApiURL: 'https://api.telegram.org'
@@ -26,10 +27,10 @@ bot.commands.on('ping', (client, msg, args) => {
 
 bot.commands.on('eval', async (c, msg, args) => {
   let evaled = await eval(args.join(' '));
-  if(typeof evaled == 'string') {
+  if(typeof evaled !== 'string') {
     evaled = util.inspect(evaled);
   };
   
-  msg.chat.send('```' + evaled + '```');
+  msg.chat.send('```js\n' + evaled + '```', { parse_mode: 'MarkdownV2' });
   
 });
