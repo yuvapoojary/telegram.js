@@ -1,22 +1,41 @@
-const Collection = require('../utils/Collection');
+'use strict';
 
+const Collection = require('../util/Collection');
+const User = require('../structures/User')
 /**
  * Base Manager which holds the caches/collections
  */
 class BaseManager {
-  constructor(client, iterator, holds, cacheSize) {
+  constructor(client, iterable, holds, cacheSize) {
+    console.log(holds instanceof User);
+    /**
+     * The instantiated client 
+     * @type {Client}
+     * @name BaseManager#client
+     * @readonly
+     */
     Object.defineProperty(this, 'client', { value: client });
+
+    /**
+     * The data structure belonging to this manager
+     * @name BaseManager#holds
+     * @type {Function}
+     * @readonly
+     * @private
+     */
+    Object.defineProperty(this, 'holds', { value: holds });
 
     this.cache = new Collection(cacheSize);
   };
 
-  add(data, { id, extras: [] }) {
-    const existing = this.cache.get(id || data.id);
+  add(data, options = {}) {
+    console.log(this.holds);
+    const existing = this.cache.get(options.id || data.id);
     if (existing && existing._patch) existing._patch(data);
     if (existing) return existing;
 
-    const entry = this.holds ? new this.holds(this.client, data, ...extras) : data;
-    this.cache.set(id || entry.id, entry);
+    const entry = new this.holds(this.client, data, ...options.extras);
+    this.cache.set(options.id || entry.id, entry);
     return entry;
   };
 

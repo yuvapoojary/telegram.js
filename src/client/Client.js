@@ -2,6 +2,7 @@ const BaseClient = require('./BaseClient');
 const PollingClient = require('./PollingClient');
 const ClientUser = require('../structures/ClientUser');
 const ChatManager = require('../managers/ChatManager');
+const UserManager = require('../managers/UserManager');
 const CommandManager = require('../structures/CommandManager');
 const Worker = require('../structures/Worker');
 
@@ -43,8 +44,13 @@ class Client extends BaseClient {
      * The webhook client used to get updates from telegram API
      * @type {WebhookClient}
      */
-    //this.webhook = new WebhookClient(this);
+    //this.webhook = new WebhookClient(this)
 
+    /**
+     * The user manager of the client
+     * @type {UserManager}
+     */
+    this.users = new UserManager(this);
     /**
      * The chat manager of the client
      * @type {ChatManager}
@@ -108,7 +114,7 @@ class Client extends BaseClient {
   async trackUpdates() {
 
   };
-  
+
   /**
    * Fetches the authenticated bot's information
    * @returns {Promise<ClientUser>}
@@ -120,7 +126,7 @@ class Client extends BaseClient {
         return this.user;
       });
   };
-  
+
   /**
    * Get latest updates from telegram API
    * @returns {Promise}

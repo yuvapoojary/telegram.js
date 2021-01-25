@@ -1,3 +1,5 @@
+'use strict';
+
 const Base = require('./Base');
 const User = require('./User');
 const Permissions = require('../util/Permissions');
@@ -106,7 +108,7 @@ class ChatMember extends Base {
       })
       .then((data) => new ChatMember(this.client, this.chatID, data));
   };
-  
+
   /**
    * Restrict a user by denying permissions
    * @param {Object} perms 
@@ -116,8 +118,8 @@ class ChatMember extends Base {
    */
   restrict(perms) {
     const permissions = new Permissions()
-    .allow(perms.allow)
-    .deny(perms.deny);
+      .allow(perms.allow)
+      .deny(perms.deny);
     return this.client.api.restrictChatMember.post({
       data: {
         chat_id: this.chatID,
@@ -129,7 +131,7 @@ class ChatMember extends Base {
   };
 
 
- /**
+  /**
    * Set/promote user permissions
    * @param {Object} perms 
    * @param {PermissionResolvable} [perms.allow]
@@ -137,8 +139,8 @@ class ChatMember extends Base {
    */
   setPermissions(perms = {}) {
     const permissions = new Permissions()
-    .allow(perms.allow)
-    .deny(perms.deny);
+      .allow(perms.allow)
+      .deny(perms.deny);
     return this.client.api.promoteChatMember.post({
       data: {
         chat_id: this.chatID,
@@ -147,7 +149,7 @@ class ChatMember extends Base {
       }
     })
   };
-  
+
   /**
    * Set custom title for this chat
    * @type {string} name The new name to set

@@ -1,10 +1,13 @@
+'use strict';
+
 const Base = require('./Base');
 const ChatMember = require('./ChatMember');
 const MessageManager = require('../managers/MessageManager');
 const ChatMemberManager = require('../managers/ChatMemberManager');
+let Message;
 
 /** 
- * Represents chat 
+ * Represents Chat 
  * extends {Base}
  */
 class Chat extends Base {
@@ -24,6 +27,7 @@ class Chat extends Base {
     this.members = new ChatMemberManager(this.client);
 
     if (data) this._patch(data);
+    if (!Message) Message = require('./Message');
   };
 
   _patch(data) {
@@ -98,7 +102,6 @@ class Chat extends Base {
    * @returns {Promise<Message>}
    */
   send(content, options = {}) {
-    const Msg = require('./Message');
     return this.client.api.sendMessage.post({
         data: {
           chat_id: this.id,
@@ -106,7 +109,7 @@ class Chat extends Base {
           ...options
         }
       })
-      .then((data) => new(require('./Message'))(this.client, data));
+      .then((data) => new Message(this.client, data));
   };
 
 

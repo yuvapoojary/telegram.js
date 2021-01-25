@@ -1,5 +1,7 @@
+'use strict';
+
 const Base = require('./Base');
-const Collection = require('@discordjs/collection');
+const Collection = require('../util/Collection');
 
 /**
  * Manages Commands and triggers them when it called

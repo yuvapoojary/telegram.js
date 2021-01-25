@@ -24,6 +24,12 @@ bot.commands.on('ping', (client, msg, args) => {
   msg.reply('pong!');
 });
 
-bot.commands.on('photo', (c, msg, args) => {
-  msg.chat.setPhoto('https://cdn.discordapp.com/attachments/766031887297806376/802235318173564948/Slide27.JPG');
+bot.commands.on('eval', async (c, msg, args) => {
+  let evaled = await eval(args.join(' '));
+  if(typeof evaled == 'string') {
+    evaled = util.inspect(evaled);
+  };
+  
+  msg.chat.send('```' + evaled + '```');
+  
 });

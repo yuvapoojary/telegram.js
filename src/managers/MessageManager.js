@@ -1,3 +1,5 @@
+'use strict';
+
 const BaseManager = require('./BaseManager');
 const Message = require('../structures/Message');
 

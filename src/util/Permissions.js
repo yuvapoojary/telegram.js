@@ -14,7 +14,8 @@ class Permissions {
    * * A permission number
    * * A Permissions instance
    * * An array of PermissionResolvable
-   * @typedef {string|number|Permissions|ermissionResolvable[]}
+   * @type {string|number|Permissions|PermissionResolvable[]}
+   * @typedef PermissionResolvable
    */
 
   /**
