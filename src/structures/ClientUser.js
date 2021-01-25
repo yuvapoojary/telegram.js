@@ -43,7 +43,7 @@ class ClientUser extends User {
   /**
    * Set commands in telegram
    * @param {Array<Object>} commands
-   * @returns =<Promise<Boolean>>}
+   * @returns {<Promise<Boolean>>}
    */
   setCommands(commands) {
     return this.client.api.setMyCommands.post({
