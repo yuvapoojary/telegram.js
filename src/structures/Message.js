@@ -18,6 +18,7 @@ class Message extends Base {
 
     /**
      * The instantiated client
+     * @type {Client}
      */
     this.client = client;
 
