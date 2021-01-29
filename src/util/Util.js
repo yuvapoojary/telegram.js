@@ -73,7 +73,79 @@ class Util {
     }
 
     throw new TypeError('REQ_RESOURCE_TYPE');
-  }
+  };
+
+  /**
+   * Options for sending message
+   * @typedef {Object} MessageOptions
+   * @property {string} [mode] Parsing mode. This can be:
+   * * MarkdownV2
+   * * Markdown
+   * * HTML
+   * @property {boolean} [silent=false] Whether to disable notification while sending message
+   * @property {Array} [entities] Array of special entities that appear in message text, which can be specified instead of parse_mode ({@link https://core.telegram.org/bots/api#messageentity})
+   * @property {boolean} [embedLinks=true] Whether to enable links preview or not
+   * @property {number} [reply] If the message is a reply, ID of the original message
+   * @property {boolean} [force] Pass True, if the message should be sent even if the specified replied-to message is not found
+   * @property {ReplyMarkup} [markup] Reply markups
+   * @property {...*} [others] Other options for specific method
+   */
+
+  static parseOptions(options = {}) {
+
+    const defaults = {
+      silent: false,
+      embedLinks: true,
+      force: true
+    };
+
+    options = Util.mergeDefault(defaults, options);
+
+    const { embedLinks, silent, force, mode, entities, reply, markup, ...others } = options;
+
+    const body = {
+      disable_web_page_preview: !embedLinks,
+      disable_notification: silent,
+      allow_sending_without_reply: force
+    };
+
+    if (mode) body.parse_mode = mode;
+    if (reply) body.reply_to_message_id = reply;
+    if (markup) body.reply_markup = markup;
+    return { ...body, ...others };
+  };
+
+  static isPlainObject(obj) {
+    if (Buffer.isBuffer(obj)) return false;
+    if (obj instanceof stream.Readable) return false;
+    if (typeof obj === 'object') return true;
+    return false;
+  };
+
+  /**
+   * Type of message. This can be:
+   * * text
+   * * photo
+   * * audio
+   * * video
+   * * vudeoNote
+   * * voice
+   * * animation
+   * * sticker
+   * * contact
+   * * document
+   * * dice
+   * * poll
+   * * location
+   * @type {string}
+   */
+  static messageTypes(msg) {
+    const Types = ['text', 'photo', 'audio', 'video', 'videoNote', 'voice', 'animation', 'sticker', 'contact', 'document', 'dice', 'poll', 'location'];
+    return Types.filter((type) => {
+      if (type === 'text' && msg.content) return type;
+      if (msg.hasOwnProperty(type)) return type;
+    })[0];
+  };
 
 }
 

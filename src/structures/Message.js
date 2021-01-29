@@ -7,6 +7,18 @@ const Chat = require('./Chat');
 const ChatMember = require('./ChatMember');
 const MessageEntity = require('./MessageEntity');
 const Location = require('./Location');
+const Util = require('../util/Util');
+const Animation = require('./media/Animation');
+const Audio = require('./media/Audio');
+const Contact = require('./media/Contact');
+const Dice = require('./media/Dice');
+const Document = require('./media/Document');
+const Photo = require('./media/Photo');
+const Poll = require('./media/Poll');
+const Sticker = require('./media/Sticker');
+const Video = require('./media/Video');
+const VideoNote = require('./media/VideoNote');
+const Voice = require('./media/Voice');
 
 /**
  * Represents message in a chat
@@ -29,6 +41,8 @@ class Message extends Base {
     this.id = data.message_id;
 
     if (data) this._patch(data);
+    
+    this.type = Util.messageTypes(this);
   };
 
   _patch(data) {
@@ -117,9 +131,62 @@ class Message extends Base {
       this.originalMessageCreatedAt = data.forward_date;
     };
 
+    if ('caption' in data) {
+      this.caption = caption;
+    };
+
+    if ('caption_entities' in data) {
+      this.captionEntities = new MessageEntity({ content: this.caption }, data.caption_entities);
+    };
+
     if ('location' in data) {
       this.location = new Location(data.location);
     };
+
+    if ('animation' in data) {
+      this.animation = new Animation(data.animation);
+    };
+
+    if ('audio' in data) {
+      this.audio = new Audio(data.audio);
+    };
+
+    if ('document' in data) {
+      this.document = new Document(data.document);
+    };
+
+    if ('photo' in data) {
+      this.photo = data.photo.map((photo) => new Photo(photo));
+    };
+
+    if ('video' in data) {
+      this.video = new Video(data.video);
+    };
+
+    if ('video_note' in data) {
+      this.videoNote = new VideoNote(data.video_note);
+    };
+
+    if ('voice' in data) {
+      this.voice = new Voice(data.voice);
+    };
+
+    if ('sticker' in data) {
+      this.sticker = new Sticker(data.sticker);
+    };
+
+    if ('contact' in data) {
+      this.contact = new Contact(data.contact);
+    };
+
+    if ('poll' in data) {
+      this.poll = new Poll(data.poll);
+    };
+
+    if ('dice' in data) {
+      this.dice = data.dice;
+    };
+
   };
 
   /**
@@ -134,7 +201,7 @@ class Message extends Base {
   /**
    * Checks, whether the message is a reply to another message
    * @readonly
-   * @type {Boolean}
+   * @type {boolean}
    */
   get isReply() {
     return this.originalMessage ? true : false;
@@ -143,7 +210,7 @@ class Message extends Base {
   /**
    * Checks, whether the message is forwarded
    * @readonly
-   * @type {Boolean}
+   * @type {boolean}
    */
   get isForwarded() {
     if (this.originalMessageId || this.originalMessageChat || this.originalMessageAuthor || this.originalMessageSignature || this.originalMessageSenderName) return true;
@@ -153,7 +220,7 @@ class Message extends Base {
   /**
    * Reply to the current message
    * @param {strin} [content] The text content to replay with
-   * @param {MessageOptions} options
+   * @param {MessageOptions} [options]
    * @returns {Message}
    */
   reply(content, options) {
@@ -162,6 +229,26 @@ class Message extends Base {
         reply_to_message_id: this.id
       })
       .then((data) => this.chat.messages.add(data));
+  };
+
+  /**
+   * Edit message 
+   * @param {string} content The text content to edit
+   * @param {MessageOptions} [options]
+   */
+  edit(content, options) {
+    return this.client.api.editMessageText.post({
+        data: {
+          text: content,
+          chat_id: this.chat.id,
+          message_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => {
+        if (typeof data == 'boolean') return data;
+        return this.chat.messages.add(data);
+      });
   };
 
   /**
@@ -185,10 +272,10 @@ class Message extends Base {
   /**
    * Copy the message to another chat
    * @param {number} chatId The id of chat
-   * @param {MessageOptions} options
+   * @param {MessageOptions} [options]
    * @returns {Message}
    */
-  copy(chatId, options = {}) {
+  copy(chatId, options) {
     return this.client.api.copyMessage.post({
       data: {
         chat_id: chatId,
@@ -198,11 +285,11 @@ class Message extends Base {
       }
     });
   };
-  
+
   /**
    * Pin the message in the chat
    * @param {Boolean} [silent=false] Whether to disable notification 
-   * @returns {Promise<Boolean>}
+   * @returns {Promise<boolean>}
    */
   pin(silent = false) {
     return this.client.api.pinChatMessage.post({
@@ -216,7 +303,7 @@ class Message extends Base {
 
   /**
    * Unpin the message in the chat if pinned
-   * @returns {Promise<Boolean>}
+   * @returns {Promise<boolean>}
    */
   unpin() {
     return this.client.api.unpinChatMessage.post({
@@ -226,10 +313,10 @@ class Message extends Base {
       }
     });
   };
-  
+
   /**
    * Delete the message, requires `can_delete_messages` permission
-   * @returns {Promise<Boolean>}
+   * @returns {Promise<boolean>}
    */
   delete() {
     return this.client.api.deleteMessage.post({

@@ -3,7 +3,9 @@
 const Base = require('./Base');
 const ChatMember = require('./ChatMember');
 const MessageManager = require('../managers/MessageManager');
+const MessageCollector = require('./MessageCollector');
 const ChatMemberManager = require('../managers/ChatMemberManager');
+const Util = require('../util/Util');
 let Message;
 
 /** 
@@ -25,7 +27,7 @@ class Chat extends Base {
     this.messages = new MessageManager(this.client);
 
     this.members = new ChatMemberManager(this.client);
-    
+
     if (data) this._patch(data);
     if (!Message) Message = require('./Message');
   };
@@ -98,21 +100,283 @@ class Chat extends Base {
   /**
    * Send a message to the chat
    * @param {String} [content] The text to send
-   * @param {MessageOptions} options The message options
+   * @param {MessageOptions} [options] The message options
    * @returns {Promise<Message>}
+   * @example
+   * client.on('message', (msg) => {
+   * if(msg.content == 'hii') {
+   *    msg.chat.send('Hello')
+   * };
+   * });
    */
-  send(content, options = {}) {
+  send(content, options) {
     return this.client.api.sendMessage.post({
         data: {
           chat_id: this.id,
           text: content,
-          ...options
+          ...Util.parseOptions(options)
         }
       })
       .then((data) => new Message(this.client, data));
   };
 
+  /**
+   * Send photo
+   * @param {BufferResolvable} [photo]
+   * @param {MessageOptions} [options] Options to send
+   * @returns {Message}
+   * @example
+   * // Using a local photo
+   * chat.sendPhoto('./image.png');
+   * // Using a url
+   * chat.sendPhoto('https://example.com/image.png');
+   * // Using a telegram file_id
+   * chat.sendPhoto({ photo: 'file_id' })
+   */
+  sendPhoto(photo, options) {
+    if (Util.isPlainObject(photo)) {
+      options = photo;
+      photo = null;
+    };
+    return this.client.api.sendPhoto.post({
+        files: [{ name: 'photo', file: photo }],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
 
+  /**
+   * Send audio that is playable by the user
+   * @param {BufferResolvable|Stream} [audio]
+   * @param {MessageOptions} [options] Options to send
+   */
+  sendAudio(audio, options = {}) {
+    if (Util.isPlainObject(audio)) {
+      options = audio;
+      audio = null;
+    };
+    return this.client.api.sendAudio.post({
+        files: audio && [{ name: 'audio', file: audio }],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => this.chat.messages.add(data, { id: data.message_id }));
+  };
+
+  /**
+   * Send document
+   * @param {BufferResolvable|Stream} [document] The document to send
+   * @param {BufferResolvable|Stream} [thumbnail] Optinal thumbnail
+   * @param {MessageOptions} [options]
+   * @returns {Message}
+   */
+  sendDocument(document, thumbnail, options) {
+    if (Util.isPlainObject(document)) {
+      options = document;
+      document = null;
+    };
+    if (Util.isPlainObject(thumbnail)) {
+      options = thumbnail;
+      thumbnail = null;
+    };
+    return this.client.api.sendDocument.post({
+        files: [
+          { name: 'document', file: document },
+          { name: 'thumb', file: thumbnail }
+          ],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
+  };
+
+  /**
+   * Send video
+   * @param {BufferResolvable|Stream} [video] The video to send
+   * @param {BufferResolvable|Stream} [thumbnail] Optinal thumbnail
+   * @param {MessageOptions} [options] 
+   * @returns {Message}
+   */
+  sendVideo(video, thumbnail, options) {
+    if (Util.isPlainObject(video)) {
+      options = video;
+      video = null;
+    };
+    if (Util.isPlainObject(thumbnail)) {
+      options = thumbnail;
+      thumbnail = null;
+    };
+    return this.client.api.sendVideo.post({
+        files: [
+          { name: 'video', file: video },
+          {
+            name: 'thumb',
+            file: thumbnail
+          }
+          ],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
+  };
+  
+  
+  /**
+   * Send video note
+   * @param {BufferResolvable|Stream} [video] The video note to send
+   * @param {BufferResolvable|Stream} [thumbnail] Optinal thumbnail
+   * @param {MessageOptions} [options] 
+   * @returns {Message}
+   */
+  sendVideoNote(video, thumbnail, options) {
+    if (Util.isPlainObject(video)) {
+      options = video;
+      video = null;
+    };
+    if (Util.isPlainObject(thumbnail)) {
+      options = thumbnail;
+      thumbnail = null;
+    };
+    return this.client.api.sendVideoNote.post({
+        files: video && [
+          { name: 'video_note', file: video },
+          {
+            name: 'thumb',
+            file: thumbnail
+          }
+          ],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
+  };
+  
+  
+  /**
+   * Send animation
+   * @param {BufferResolvable|Stream} [animation] The animation to send
+   * @param {BufferResolvable|Stream} [thumbnail] Optinal thumbnail
+   * @param {MessageOptions} [options] 
+   * @returns {Message}
+   */
+  sendAnimation(animation, thumbnail, options) {
+    if (Util.isPlainObject(animation)) {
+      options = animation;
+      animation = null;
+    };
+    if (Util.isPlainObject(thumbnail)) {
+      options = thumbnail;
+      thumbnail = null;
+    };
+    return this.client.api.sendAnimation.post({
+        files: animation && [
+          { name: 'animation', file: animation },
+          {
+            name: 'thumb',
+            file: thumbnail
+            }
+            ],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => this.chat.messages.add(data, { id: data.message_id }));
+  };
+  
+  
+  /**
+   * Send voice 
+   * @param {BufferResolvable|Stream} [voice] The voice to send
+   * @param {MessageOptions} [options] 
+   * @returns {Message}
+   */
+  sendVoice(voice, options) {
+    if (Util.isPlainObject(voice)) {
+      options = voice;
+      voice = null;
+    };
+    return this.client.api.sendDocument.post({
+        files: voice && [
+          { name: 'voice', file: voice }],
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
+  };
+  
+  /**
+   * Send location
+   * @param {number} latitude The latitude of location
+   * @param {number} longitude The longitude of location
+   * @param {MessageOptions} [options] 
+   * @returns {Message}
+   */
+  sendLocation(latitude, longitude, options) {
+     return this.client.api.sendLocation.post({
+       data: {
+         chat_id: this.id,
+         latitude,
+         longitude,
+         ...Util.parseOptions(options)
+       }
+     })
+     .then((data) => new Message(data));
+  };
+  
+  /**
+   * Send media groups
+   * @param {Array} media 
+   * @param {MessageOptions} [options]
+   * @returns {Message[]}
+   */
+  sendMediaGroup(media, options = {}) {
+    return this.client.api.sendMediaGroup.post({
+      data: {
+        files: media,
+        ...options
+      }
+    })
+  };
+  
+  sendContact(phoneNumber, firstName, lastName, options) {
+    return this.client.api.sendContact.post({
+      data: {
+        chat_id: this.id,
+        phone_number: phoneNumber,
+        first_name: firstName,
+        last_name: lastName,
+        ...Util.parseOptions(options)
+      }
+    })
+    .then((data) => new Message(data));
+  }
+  
+  /**
+   * Show typing placeholder
+   * @returns {Promise<booleam>}
+   */
+  startTyping() {
+     return this.client.api.sendChatAction.post({
+       data: {
+         chat_id: thid.id,
+         action: 'typing'
+       }
+     })
+  };
   /**
    * Kicks a member from the chat
    * @param {String} userId The id of user to kick
@@ -304,6 +568,56 @@ class Chat extends Base {
       }
     });
   };
+
+  /**
+   * Creates a Message Collector.
+   * @param {CollectorFilter} filter The filter to create the collector with
+   * @param {MessageCollectorOptions} [options={}] The options to pass to the collector
+   * @returns {MessageCollector}
+   * @example
+   * // Create a message collector
+   * const filter = m => m.content.includes('telegram');
+   * const collector = chat.createMessageCollector(filter, { time: 15000 });
+   * collector.on('collect', m => console.log(`Collected ${m.content}`));
+   * collector.on('end', collected => console.log(`Collected ${collected.size} items`));
+   */
+  createMessageCollector(filter, options = {}) {
+    return new MessageCollector(this, filter, options);
+  }
+
+  /**
+   * An object containing the same properties as CollectorOptions, but a few more:
+   * @typedef {MessageCollectorOptions} AwaitMessagesOptions
+   * @property {string[]} [errors] Stop/end reasons that cause the promise to reject
+   */
+
+  /**
+   * Similar to createMessageCollector but in promise form.
+   * Resolves with a collection of messages that pass the specified filter.
+   * @param {CollectorFilter} filter The filter function to use
+   * @param {AwaitMessagesOptions} [options={}] Optional options to pass to the internal collector
+   * @returns {Promise<Collection<S
+   * string, Message>>}
+   * @example
+   * // Await /vote messages
+   * const filter = m => m.content.startsWith('/vote');
+   * // Errors: ['time'] treats ending because of the time limit as an error
+   * chat.awaitMessages(filter, { max: 4, time: 60000, errors: ['time'] })
+   *   .then(collected => console.log(collected.size))
+   *   .catch(collected => console.log(`After a minute, only ${collected.size} out of 4 voted.`));
+   */
+  awaitMessages(filter, options = {}) {
+    return new Promise((resolve, reject) => {
+      const collector = this.createMessageCollector(filter, options);
+      collector.once('end', (collection, reason) => {
+        if (options.errors && options.errors.includes(reason)) {
+          reject(collection);
+        } else {
+          resolve(collection);
+        }
+      });
+    });
+  }
 
 };
 

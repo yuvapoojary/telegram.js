@@ -1,10 +1,12 @@
 const BaseClient = require('./BaseClient');
 const PollingClient = require('./PollingClient');
+const WebhookClient = require('./WebhookClient');
 const ClientUser = require('../structures/ClientUser');
 const ChatManager = require('../managers/ChatManager');
 const UserManager = require('../managers/UserManager');
 const CommandManager = require('../structures/CommandManager');
-const Worker = require('../structures/Worker');
+const WorkerClient = require('./WorkerClient');
+const fs = require('fs');
 
 /**
  * The main hub for interacting with telegram Bot API
@@ -30,9 +32,9 @@ class Client extends BaseClient {
 
     /**
      * The worker of the client
-     * @type {Worker}
+     * @type {WorkerClient}
      */
-    this.worker = new Worker(this);
+    this.worker = new WorkerClient(this);
 
     /**
      * The polling client used to get updates from telegram API
@@ -44,7 +46,7 @@ class Client extends BaseClient {
      * The webhook client used to get updates from telegram API
      * @type {WebhookClient}
      */
-    //this.webhook = new WebhookClient(this)
+    this.webhook = new WebhookClient(this)
 
     /**
      * The user manager of the client
@@ -101,18 +103,39 @@ class Client extends BaseClient {
     await this.fetchApplication();
     this.readyAt = Date.now();
     this.emit('ready');
-    await this.trackUpdates();
   };
 
   startPolling() {
     this.polling.start();
   };
 
-  /**
-   * Track telegram updates either through polling or webhooks 
-   */
-  async trackUpdates() {
+  setWebhook(url, options = {}) {
+    return this.client.api.setWebhook.post({
+      data: {
+        url,
+        ...options
+      },
+      files: [{
+        name: 'certificate',
+        file: options.certificate
+       }]
+    })
+  };
 
+  deleteWebhook(dropUpdates = false) {
+    return this.client.api.deleteWebhook.post({
+      data: {
+        drop_pending_updates: dropUpdates
+      }
+    });
+  };
+
+  setupWebhook(path, port = 8443, host = '0.0.0.0', tlsOptions) {
+    if (tlsOptions) {
+      tlsOptions.key = fs.readFileSync(tlsOptions.key, 'utf8');
+      tlsOptions.cert = fs.readFileSync(tlsOptions.cert, 'utf8');
+    };
+    this.webhook.createServer(path, port, host, tlsOptions);
   };
 
   /**
@@ -137,7 +160,21 @@ class Client extends BaseClient {
     });
   };
 
+  /**
+   * Log outs from the cloud Bot API
+   * @returns {Promise<boolean>}
+   */
+  logout() {
+    return this.client.logOut.post()
+  };
 
+  /**
+   * Closes the bot instance
+   * @returns {Promise<boolean>}
+   */
+  close() {
+    return this.api.close.post();
+  };
 };
 
 module.exports = Client;

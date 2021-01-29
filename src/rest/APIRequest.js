@@ -23,32 +23,35 @@ class APIRequest {
   };
 
   async make() {
-    const url = `${this.rest.endpoint}/${this.rest.getAuth()}${this.path}?${this.querystring && this.querystring}`;
+    const url = `${this.rest.endpoint}/${this.rest.getAuth()}${this.path}${this.querystring && '?'+this.querystring}`;
     this.url = url;
     let headers = {};
-    
-    if(this.method === 'get') return fetch(url, {
+
+    if (this.method === 'get') return fetch(url, {
       method: this.method,
       agent,
     });
-    
+
     let body;
     if (this.options.files && this.options.files.length) {
       body = new FormData();
-      for (const file of this.options.files)
-        if (file && file.file) body.append(file.name, await Util.resolveBuffer(file.file), file.name);
-      if (typeof this.options.data !== 'undefined') {
+      for (const file of this.options.files) {
+        if (file && file.file) {
+          const buffer = await Util.resolveBuffer(file.file);
+          body.append(file.name, buffer);
+        };
+      };
+      if (this.options.data) {
         for (const key in this.options.data) {
-          body.append(key, this.options.data[key]);
+          body.append(key, JSON.stringify(this.options.data[key]));
         };
       };
       headers = Object.assign(headers, body.getHeaders());
 
-    } else if (this.options.data != null) {
+    } else {
       body = JSON.stringify(this.options.data);
       headers['Content-Type'] = 'application/json';
     };
-
 
     return fetch(url, {
       headers,
