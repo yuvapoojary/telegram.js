@@ -40,7 +40,7 @@ class File {
 
   /**
    * Url of the file
-   * @returns {?string}
+   * @type {?string}
    */
   get url() {
     if (!this.path) return null;
