@@ -45,7 +45,7 @@ class InlineQuery extends Base {
     if ('location' in data) {
       /**
        * Sender location, only for bots that request user location
-       * @type{?Location}
+       * @type {?Location}
        */
       this.location = new Location(data.location)
     };

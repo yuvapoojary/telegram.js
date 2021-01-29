@@ -105,3 +105,6 @@ dist
 
 # files
 test.js
+*.key
+*.csr
+*.crt
