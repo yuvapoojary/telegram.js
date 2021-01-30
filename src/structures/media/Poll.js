@@ -1,15 +1,16 @@
 'use strict';
 
-/** 
+const MessageEntity = require('../MessageEntity');
+
+/**
  * Represents the poll
  */
 class Poll {
   constructor(data) {
     if (data) this._patch(data);
-  };
+  }
 
   _patch(data) {
-
     /**
      * Identifier of the poll
      * @type {string}
@@ -42,7 +43,7 @@ class Poll {
        * @type {?number}
        */
       this.correctOptionIndex = data.correct_option_id;
-    };
+    }
 
     /**
      * Total number of users voted to the poll
@@ -62,7 +63,7 @@ class Poll {
        * @type {?boolean}
        */
       this.isClosed = data.is_closed;
-    };
+    }
 
     if ('is_anonymous' in data) {
       /**
@@ -70,7 +71,7 @@ class Poll {
        * @type {?boolean}
        */
       this.isAnonymous = data.is_anonymous;
-    };
+    }
 
     if ('explanation' in data) {
       /**
@@ -78,7 +79,7 @@ class Poll {
        * @type {?string}
        */
       this.explanation = data.explanation;
-    };
+    }
 
     if ('explanation_entities' in data) {
       /**
@@ -86,7 +87,7 @@ class Poll {
        * @type {?MessageEntity}
        */
       this.entities = new MessageEntity({ content: this.explanation }, data.explanation_entities);
-    };
+    }
 
     if ('open_period' in data) {
       /**
@@ -94,7 +95,7 @@ class Poll {
        * @type {?number}
        */
       this.openPeriod = data.openPeriod;
-    };
+    }
 
     if ('close_date' in data) {
       /**
@@ -102,7 +103,7 @@ class Poll {
        * @type {?Date}
        */
       this.closeDate = data.closeDate;
-    };
+    }
   }
 
   /**
@@ -111,8 +112,7 @@ class Poll {
    */
   get correctOption() {
     return this.options[this.correctOptionIndex];
-  };
-
-};
+  }
+}
 
 module.exports = Poll;

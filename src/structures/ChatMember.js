@@ -28,7 +28,7 @@ class ChatMember extends Base {
      * The user id of the member
      * @type {number}
      */
-    this.id = data.user.id
+    this.id = data.user.id;
 
     /**
      * The id of the chat where this member belongs to
@@ -42,11 +42,11 @@ class ChatMember extends Base {
        * @type {User}
        */
       this.user = new User(this.client, data.user);
-    };
+    }
 
     if ('status' in data) {
       /**
-       * The member's status in the chat. This can be 
+       * The member's status in the chat. This can be
        * * creator
        * * administrator
        * * member
@@ -56,7 +56,7 @@ class ChatMember extends Base {
        * @type {string}
        */
       this.status = data.status;
-    };
+    }
 
     if ('custom_title' in data) {
       /**
@@ -64,7 +64,7 @@ class ChatMember extends Base {
        * @type {?string}
        */
       this.nickname = data.custom_title;
-    };
+    }
 
     if ('is_anonymous' in data) {
       /**
@@ -72,7 +72,7 @@ class ChatMember extends Base {
        * @type {?Boolean}
        */
       this.anonymous = data.is_anonymous;
-    };
+    }
 
     this.permissions = new Permissions(data);
 
@@ -83,16 +83,16 @@ class ChatMember extends Base {
        */
       this.unbansAt = data.unix_date;
     }
-  };
+  }
 
   /**
    * Whether the user is banned/kicked
-   * @type {Boolean}
+   * @type {boolean}
    * @readonly
    */
   get isRestricted() {
-    return this.unbansAt ? true : false;
-  };
+    return !!this.unbansAt;
+  }
 
   /**
    * Fetch latest data of this member from telegram API
@@ -103,69 +103,64 @@ class ChatMember extends Base {
       .get({
         query: {
           chat_id: this.chatID,
-          user_id: this.id
-        }
+          user_id: this.id,
+        },
       })
-      .then((data) => new ChatMember(this.client, this.chatID, data));
-  };
+      .then(data => new ChatMember(this.client, this.chatID, data));
+  }
 
   /**
    * Restrict a user by denying permissions
-   * @param {Object} perms 
+   * @param {Object} perms
    * @param {PermissionResolvable} [perms.allow]
    * @param {PermissionResolvable} [perms.deny]
-   * @param {Date} [perms.untilDate] 
+   * @param {Date} [perms.untilDate]
+   * @returns {Promise<boolean>}
    */
   restrict(perms) {
-    const permissions = new Permissions()
-      .allow(perms.allow)
-      .deny(perms.deny);
+    const permissions = new Permissions().allow(perms.allow).deny(perms.deny);
     return this.client.api.restrictChatMember.post({
       data: {
         chat_id: this.chatID,
         user_id: this.id,
         permissions: permissions.toObject(),
-        until_date: perms.untilDate || null
-      }
+        until_date: perms.untilDate || null,
+      },
     });
-  };
-
+  }
 
   /**
    * Set/promote user permissions
-   * @param {Object} perms 
+   * @param {Object} perms
    * @param {PermissionResolvable} [perms.allow]
    * @param {PermissionResolvable} [perms.deny]
+   * @returns {Promise<boolean>}
    */
   setPermissions(perms = {}) {
-    const permissions = new Permissions()
-      .allow(perms.allow)
-      .deny(perms.deny);
+    const permissions = new Permissions().allow(perms.allow).deny(perms.deny);
     return this.client.api.promoteChatMember.post({
       data: {
         chat_id: this.chatID,
         user_id: this.id,
-        ...permissions.toObject()
-      }
-    })
-  };
+        ...permissions.toObject(),
+      },
+    });
+  }
 
   /**
    * Set custom title for this chat
    * @param {string} name The new name to set
-   * @returns {Promise<Boolean>}
+   * @returns {Promise<boolean>}
    */
   setNickName(name) {
     return this.client.api.setChatAdministratorCustomTitle.post({
       data: {
         chat_id: this.chatID,
         user_id: this.id,
-        custom_title: name
-      }
-    })
-  };
-
-
-};
+        custom_title: name,
+      },
+    });
+  }
+}
 
 module.exports = ChatMember;

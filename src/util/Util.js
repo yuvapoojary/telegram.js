@@ -1,13 +1,14 @@
+'use strict';
+
 const fs = require('fs');
+const path = require('path');
 const stream = require('stream');
 const fetch = require('node-fetch');
-const path = require('path');
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
 /**
  * Contains various usefull utility functions
  */
-
 class Util {
   constructor() {
     throw new Error('The Util class may not be instantiated');
@@ -31,8 +32,7 @@ class Util {
     }
 
     return given;
-  };
-
+  }
 
   /**
    * Data that can be resolved to give a Buffer. This can be:
@@ -60,67 +60,81 @@ class Util {
       if (/^https?:\/\//.test(resource)) {
         const res = await fetch(resource);
         return res.body;
-      } else if (true) {
-        return new Promise((resolve, reject) => {
-          const file = path.resolve(resource);
-          fs.stat(file, (err, stats) => {
-            if (err) return reject(err);
-            if (!stats.isFile()) return reject(new Error('FILE_NOT_FOUND', file));
-            return resolve(fs.createReadStream(file));
-          });
-        });
       }
+      return new Promise((resolve, reject) => {
+        const file = path.resolve(resource);
+        fs.stat(file, (err, stats) => {
+          if (err) return reject(err);
+          if (!stats.isFile()) return reject(new Error('FILE_NOT_FOUND', file));
+          return resolve(fs.createReadStream(file));
+        });
+      });
     }
-
     throw new TypeError('REQ_RESOURCE_TYPE');
-  };
+  }
 
   /**
    * Options for sending message
    * @typedef {Object} MessageOptions
-   * @property {string} [mode] Parsing mode. This can be:
+   * @property {string} [mode] Parsing
+   * mode,This can be:
    * * MarkdownV2
    * * Markdown
    * * HTML
-   * @property {boolean} [silent=false] Whether to disable notification while sending message
-   * @property {Array} [entities] Array of special entities that appear in message text, which can be specified instead of parse_mode ({@link https://core.telegram.org/bots/api#messageentity})
-   * @property {boolean} [embedLinks=true] Whether to enable links preview or not
-   * @property {number} [reply] If the message is a reply, ID of the original message
-   * @property {boolean} [force] Pass True, if the message should be sent even if the specified replied-to message is not found
-   * @property {ReplyMarkup} [markup] Reply markups
-   * @property {...*} [others] Other options for specific method
+   * @property {boolean} [silent=false]
+   * Whether to disable notification
+   * while sending message
+   * @property {Array} [entities] Array
+   * of special entities that appear in
+   * message text, which can be specified
+   * instead of parse_mode ({@link http
+   * ://core.telegram.org/bot
+   * /api#messageentity})
+   * @property {boolean} [embedLink
+   * =true] Whether to enable links
+   * preview or not
+   * @property {number} [reply] If the
+   * message is a reply, ID of the
+   * original message
+   * @property {boolean} [force] Pass
+   * true,if the message should be sent
+   * even if the specified replied-to
+   * message is not found
+   * @property {ReplyMarkup} [markup]
+   * Reply markups
+   * @property {...*} [others] Other
+   * options for specific method
    */
 
   static parseOptions(options = {}) {
-
     const defaults = {
       silent: false,
       embedLinks: true,
-      force: true
+      force: true,
     };
 
     options = Util.mergeDefault(defaults, options);
 
-    const { embedLinks, silent, force, mode, entities, reply, markup, ...others } = options;
+    const { embedLinks, silent, force, mode, reply, markup, ...others } = options;
 
     const body = {
       disable_web_page_preview: !embedLinks,
       disable_notification: silent,
-      allow_sending_without_reply: force
+      allow_sending_without_reply: force,
     };
 
     if (mode) body.parse_mode = mode;
     if (reply) body.reply_to_message_id = reply;
     if (markup) body.reply_markup = markup;
     return { ...body, ...others };
-  };
+  }
 
   static isPlainObject(obj) {
     if (Buffer.isBuffer(obj)) return false;
     if (obj instanceof stream.Readable) return false;
     if (typeof obj === 'object') return true;
     return false;
-  };
+  }
 
   /**
    * Type of message. This can be:
@@ -137,20 +151,36 @@ class Util {
    * * dice
    * * poll
    * * location
-   * @type {string}
+   * @typedef {string} MessageTypes
    */
+
   static messageTypes(msg) {
-    const Types = ['text', 'photo', 'audio', 'video', 'videoNote', 'voice', 'animation', 'sticker', 'contact', 'document', 'dice', 'poll', 'location'];
-    return Types.filter((type) => {
+    const Types = [
+      'text',
+      'photo',
+      'audio',
+      'video',
+      'videoNote',
+      'voice',
+      'animation',
+      'sticker',
+      'contact',
+      'document',
+      'dice',
+      'poll',
+      'location',
+    ];
+    return Types.filter(type => {
       if (type === 'text' && msg.content) return type;
-      if (msg.hasOwnProperty(type)) return type;
+      // eslint-disable-next-line
+      if (Object.prototype.hasOwnProperty(msg, type)) return type;
+      return null;
     })[0];
-  };
-  
+  }
+
   static isDoubleArray(array) {
     return Array.isArray(array[0]);
-  };
-
+  }
 }
 
 module.exports = Util;

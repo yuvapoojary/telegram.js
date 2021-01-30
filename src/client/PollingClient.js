@@ -1,9 +1,11 @@
+'use strict';
+
 /**
  * The polling client that is used to poll updates from telegram at specific intervals.
  */
 class PollingClient {
   constructor(client) {
-    this.client = client
+    this.client = client;
     this.options = client.options;
     this.lastUpdate = null;
     this.lastRequest = null;
@@ -13,15 +15,16 @@ class PollingClient {
   }
 
   /**
-   * Starts API polling 
+   * Starts API polling
+   * @returns {boolean}
    */
   start() {
     if (this.lastRequest) {
       return false;
-    };
+    }
     this.poll();
     return true;
-  };
+  }
 
   /**
    * Stops polling if running
@@ -30,30 +33,26 @@ class PollingClient {
     this.client.clearTimeout(this.pollTimeout);
     if (this.pollTimeout) {
       clearTimeout(this.pollTimeout);
-    };
+    }
 
     this.lastRequest = null;
-  };
-
+  }
 
   poll() {
-    this.client.getUpdates(this.offset && ({
-        offset: this.offset
-      }))
-      .then((res) => {
+    this.client
+      .getUpdates(
+        this.offset && {
+          offset: this.offset,
+        },
+      )
+      .then(res => {
         if (res.length) this.offset = res[res.length - 1].update_id + 1;
         for (const data of res) {
           this.client.worker.processUpdate(data);
-        };
-
+        }
       })
-      .catch((err) => {
-        console.log(err);
-        if (err.status == 404) return;
-        if (err.status == 409) {
-          return this.client.removeWebhook()
-            .then(() => this.poll());
-        };
+      .catch(err => {
+        if (err.status === 404) return;
         throw err;
       })
       .finally(() => {
@@ -62,7 +61,6 @@ class PollingClient {
         }, this.interval);
       });
   }
-
-};
+}
 
 module.exports = PollingClient;

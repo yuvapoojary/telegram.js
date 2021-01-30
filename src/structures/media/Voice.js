@@ -1,7 +1,6 @@
 'use strict';
 
 const File = require('./File');
-const Photo = require('./Photo');
 
 /**
  * Represents the voice
@@ -22,8 +21,7 @@ class Voice extends File {
      * @type {?string}
      */
     this.mimeType = data.mime_type || null;
-    
-  };
-};
+  }
+}
 
 module.exports = Voice;

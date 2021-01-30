@@ -4,8 +4,6 @@
  * Represents the markup button
  */
 class MarkupButton {
-  constructor() {};
-  
   /**
    * Text button with optional callback
    * @param {string} content The text of the button
@@ -15,10 +13,10 @@ class MarkupButton {
   static text(content, callbackData) {
     return {
       text: content,
-      callback_data: callbackData || content
+      callback_data: callbackData || content,
     };
-  };
-  
+  }
+
   /**
    * Shows a clickable button
    * @param {string} text The text of the link
@@ -28,17 +26,17 @@ class MarkupButton {
   static url(text, url) {
     return {
       text,
-      url
+      url,
     };
-  };
-  
+  }
+
   /**
-   * Shows a button which promts user to login 
+   * Shows a button which promts user to login
    * @param {string} text The text of the button
    * @param {string} url A http url
-   * @param {string} [forwardText] The text for the forward message
-   * @param {string} [botUsername] Bot username to show in the login prompt
-   * @param {boolea} [requestWriteAccess=false] Request write access
+   * @param {string} [forward_text] The text for the forward message
+   * @param {string} [bot_username] Bot username to show in the login prompt
+   * @param {boolea} [request_write_access=false] Request write access
    * @returns {Object}
    */
   static login(text, url, forward_text, bot_username, request_write_access = false) {
@@ -48,11 +46,11 @@ class MarkupButton {
         url,
         forward_text,
         bot_username,
-        request_write_access
-      }
+        request_write_access,
+      },
     };
-  };
-  
+  }
+
   /**
    * Allows switching of a chat and places the specified query in the input box
    * @param {string} text Text of the button
@@ -62,10 +60,10 @@ class MarkupButton {
   static switchToChat(text, query = '') {
     return {
       text,
-      switch_inline_query: query
+      switch_inline_query: query,
     };
-  };
-  
+  }
+
   /**
    * Places the specified query in the input box of the current chat
    * @param {string} text The text of the button
@@ -75,12 +73,11 @@ class MarkupButton {
   static inputQuery(text, query = '') {
     return {
       text,
-      switch_inline_query_current_chat: query
-    }
-  };
-  
+      switch_inline_query_current_chat: query,
+    };
+  }
   /**
-   * Callback game 
+   * Callback game
    * @param {string} text The text of the button
    * @param {string} game
    * @returns {Object}
@@ -88,10 +85,10 @@ class MarkupButton {
   static callbackGame(text, game = {}) {
     return {
       text,
-      callback_game: game
-    }
-  };
-  
+      callback_game: game,
+    };
+  }
+
   /**
    * Shows a pay button
    * @param {string} text The text of the pay button
@@ -100,10 +97,10 @@ class MarkupButton {
   static pay(text) {
     return {
       text,
-      pay: true
-    }
-  };
-  
+      pay: true,
+    };
+  }
+
   /**
    * Request contact from the user
    * @param {string} text The text of the button
@@ -112,10 +109,10 @@ class MarkupButton {
   static requestContact(text) {
     return {
       text,
-      request_contact: true
-    }
-  };
-  
+      request_contact: true,
+    };
+  }
+
   /**
    * Request location of the user
    * @param {string} text The text of the button
@@ -124,10 +121,10 @@ class MarkupButton {
   static requestLocation(text) {
     return {
       text,
-      request_location: true
-    }
-  };
-  
+      request_location: true,
+    };
+  }
+
   /**
    * Request user to do a poll
    * @param {string} text The text of the button
@@ -138,10 +135,10 @@ class MarkupButton {
     return {
       text,
       request_poll: {
-        type: pollType
-      }
-    }
-  };
-};
+        type: pollType,
+      },
+    };
+  }
+}
 
 module.exports = MarkupButton;

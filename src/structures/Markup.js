@@ -9,7 +9,7 @@ const Util = require('../util/Util');
 class Markup {
   constructor(data) {
     Object.assign(this, data);
-  };
+  }
 
   /**
    * Button of the markup
@@ -17,83 +17,87 @@ class Markup {
    */
   static get button() {
     return MarkupButton;
-  };
+  }
 
   /**
    * When set to true the inine/keyboard will show to message author only
-   * @param {boolean} [value=true] 
+   * @param {boolean} [value=true]
    * @returns {Markup}
    */
   selective(value = true) {
     return new Markup({
       ...this,
-      selective: value
+      selective: value,
     });
-  };
+  }
 
   /**
    * Resizes the keyboard
-   * @param {boolean} [value=true] 
+   * @param {boolean} [value=true]
    * @returns {Markup}
    */
   resize(value = true) {
     return new Markup({
       ...this,
-      resize_keyboard: value
-    })
-  };
+      resize_keyboard: value,
+    });
+  }
 
   /**
    * Make keyboard shows only one time
-   * @param {boolean} [value=true] 
+   * @param {boolean} [value=true]
    * @returns {Markup}
    */
   oneTime(value = true) {
     return new Markup({
       ...this,
-      one_time_keyboard: value
+      one_time_keyboard: value,
     });
-  };
+  }
 
   /**
    * Keyboard
-   * @type {Markup}
+   * @param {MarkupButton[]} data
+   * @returns {Markup}
    */
   static keyboard(data) {
     return new Markup({
-      keyboard: Markup.build(data)
-    })
-  };
+      keyboard: Markup.build(data),
+    });
+  }
 
   /**
    * Inline keyboard
-   * @type {Markup}
+   * @param {MarkupButton[]} data
+   * @returns {Markup}
    */
   static inlineKeyboard(data) {
     return new Markup({
-      inline_keyboard: Markup.build(data)
-    })
-  };
+      inline_keyboard: Markup.build(data),
+    });
+  }
 
   /**
    * Removes keyboard menu
-   * @type {Markup}
+   * @param {boolean} [value=true]
+   * @returns {Markup}
    */
   static removeKeyboard(value = true) {
     return new Markup({
-      remove_keyboard: value
+      remove_keyboard: value,
     });
-  };
+  }
 
   /**
    * Force reply
-   * @type {Markup}
+   * @param {boolean} [value=true]
+   * @returns {Markup}
    */
   static forceReply(value = true) {
     return new Markup({
-      force_reply: value
-    })
-  };
+      force_reply: value,
+    });
+  }
 
   static build(data) {
     const array = [];
@@ -104,30 +108,31 @@ class Markup {
           if (typeof text === 'string') {
             rowArray.push({
               text,
-              callback_data: text
+              callback_data: text,
             });
             break;
-          };
-          rowArray.push(button);
-        };
+          }
+          rowArray.push(text);
+        }
         array.push(rowArray);
-      };
-    };
+      }
+    }
 
     for (const text of data) {
       if (typeof text === 'string') {
-        array.push([{
-          text,
-          callback_data: text
-        }]);
+        array.push([
+          {
+            text,
+            callback_data: text,
+          },
+        ]);
         break;
       }
       array.push([text]);
-    };
+    }
 
     return array;
-  };
-
-};
+  }
+}
 
 module.exports = Markup;

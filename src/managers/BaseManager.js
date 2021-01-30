@@ -1,14 +1,13 @@
 'use strict';
 
 const Collection = require('../util/Collection');
-const User = require('../structures/User')
 /**
  * Base Manager which holds the caches/collections
  */
 class BaseManager {
   constructor(client, iterable, holds, cacheSize) {
     /**
-     * The instantiated client 
+     * The instantiated client
      * @type {Client}
      * @name BaseManager#client
      * @readonly
@@ -25,7 +24,7 @@ class BaseManager {
     Object.defineProperty(this, 'holds', { value: holds });
 
     this.cache = new Collection(cacheSize);
-  };
+  }
 
   add(data, { id, extras = [] } = {}) {
     const existing = this.cache.get(id || data.id);
@@ -35,16 +34,16 @@ class BaseManager {
     if (data instanceof this.holds) {
       this.cache.set(data.id, data);
       return data;
-    };
+    }
 
     const entry = new this.holds(this.client, data, ...extras);
     this.cache.set(id || entry.id, entry);
     return entry;
-  };
+  }
 
   remove(id) {
     return this.cache.delete(id);
-  };
+  }
 
   /**
    * Resolves a data entry to a data Object.
@@ -70,8 +69,7 @@ class BaseManager {
 
   valueOf() {
     return this.cache;
-  };
-
-};
+  }
+}
 
 module.exports = BaseManager;

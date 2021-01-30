@@ -1,18 +1,16 @@
 'use strict';
 
-const Base = require('./Base');
-const Collection = require('../util/Collection');
 const User = require('./User');
+const Collection = require('../util/Collection');
 
 /**
  * Entities parsed from {@link Message}
  */
 class MessageEntity {
   constructor(message, data = []) {
-
     /**
      * Any users that were mentioned
-     * @type {Collection<number, User>} 
+     * @type {Collection<number, User>}
      */
     this.users = new Collection();
 
@@ -64,22 +62,22 @@ class MessageEntity {
      */
     this.links = new Collection();
 
-
     this._patch(message, data);
 
     /**
      * Get raw data of entities
      * @function
      * @name MessageEntity#getRaw
+     * @returns {Array}
      */
     this.getRaw = () => data;
-  };
+  }
 
   _patch(message, data) {
     for (const entity of data) {
       if (entity.type === 'text_mention') {
         return this.users.set(entity.user.id, new User(message.client, entity.user));
-      };
+      }
       const sliced = message.content.slice(entity.offset, 0);
 
       entity.id = message.content.slice(entity.offset, -(sliced.length - entity.length));
@@ -121,10 +119,10 @@ class MessageEntity {
           break;
         case 'pre':
           break;
-      };
-    };
-  };
-
-};
+      }
+    }
+    return this;
+  }
+}
 
 module.exports = MessageEntity;

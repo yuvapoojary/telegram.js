@@ -12,17 +12,16 @@ class ClientUser extends User {
 
     if ('can_join_groups' in data) {
       this.invitable = data.can_join_groups;
-    };
+    }
 
     if ('can_read_all_group_messages' in data) {
       this.privacyMode = !data.can_read_all_group_messages;
-    };
+    }
 
     if ('supports_inline_queries' in data) {
       this.supportsIq = data.supports_inline_queries;
-    };
-
-  };
+    }
+  }
 
   /**
    * Fetches the client user from API
@@ -30,7 +29,7 @@ class ClientUser extends User {
    */
   fetch() {
     return this.client.fetchApplication();
-  };
+  }
 
   /**
    * Get registered commands in telegram
@@ -38,26 +37,26 @@ class ClientUser extends User {
    */
   getCommands() {
     return this.client.api.getMyCommands.get();
-  };
+  }
 
   /**
    * Set commands in telegram
    * @param {Array<Object>} commands
-   * @returns {Promise<Boolean>}
+   * @returns {Promise<boolean>}
    */
   setCommands(commands) {
     return this.client.api.setMyCommands.post({
       data: {
-        commands
-      }
+        commands,
+      },
     });
-  };
+  }
 
   /**
    * Add command
-   * @param {String} command Commad name
-   * @param {String} description Command description
-   * @returns {Promise<Boolean>}
+   * @param {string} command Commad name
+   * @param {string} description Command description
+   * @returns {Promise<boolean>}
    */
   async addCommand(command, description) {
     const cmds = [];
@@ -66,34 +65,31 @@ class ClientUser extends User {
       for (const cmd of command) {
         cmds.push({
           command: cmd.command,
-          description: cmd.description
+          description: cmd.description,
         });
-      };
+      }
     } else {
       cmds.push({
         command,
-        description
+        description,
       });
-    };
+    }
 
     const existing = await this.getCommands();
     return this.setCommands(existing.concat(cmds));
-  };
+  }
 
   /**
    * Remove command
-   * @param {String} command Name of the command to remove
-   * @returns {Promise<Boolean>}
+   * @param {string} command Name of the command to remove
+   * @returns {Promise<boolean>}
    */
-  async removeCommand(commandName) {
+  async removeCommand(command) {
     const existing = await this.getCommands();
-    const cmds = existing.filter((el) => el.command === commandName);
+    const cmds = existing.filter(el => el.command === command);
     if (existing.length === cmds.length) throw new Error('Command Not Found');
     return this.setCommands(cmds);
-  };
-
-
-
-};
+  }
+}
 
 module.exports = ClientUser;

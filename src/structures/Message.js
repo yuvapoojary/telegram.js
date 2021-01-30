@@ -1,13 +1,10 @@
 'use strict';
 
 const Base = require('./Base');
-const User = require('./User');
-const ClientUser = require('./ClientUser');
 const Chat = require('./Chat');
-const ChatMember = require('./ChatMember');
-const MessageEntity = require('./MessageEntity');
 const Location = require('./Location');
-const Util = require('../util/Util');
+const MessageEntity = require('./MessageEntity');
+const User = require('./User');
 const Animation = require('./media/Animation');
 const Audio = require('./media/Audio');
 const Contact = require('./media/Contact');
@@ -19,6 +16,7 @@ const Sticker = require('./media/Sticker');
 const Video = require('./media/Video');
 const VideoNote = require('./media/VideoNote');
 const Voice = require('./media/Voice');
+const Util = require('../util/Util');
 
 /**
  * Represents message in a chat
@@ -43,10 +41,9 @@ class Message extends Base {
     if (data) this._patch(data);
 
     this.type = Util.messageTypes(this);
-  };
+  }
 
   _patch(data) {
-
     /**
      * The timestamp at which this message was created
      * @type {Date}
@@ -67,8 +64,7 @@ class Message extends Base {
       this.author = this.client.users.add(data.from);
     } else {
       this.author = null;
-    };
-
+    }
 
     if ('text' in data) {
       /**
@@ -78,7 +74,7 @@ class Message extends Base {
       this.content = data.text;
     } else {
       this.content = null;
-    };
+    }
 
     /**
      * The chat the message was sent in
@@ -104,23 +100,23 @@ class Message extends Base {
        * @type {?Message}
        */
       this.originalMessage = new Message(this.client, data.reply_to_message);
-    };
+    }
 
     if ('sender_chat' in data) {
       /**
-       * The chat where the message is forwarded from 
+       * The chat where the message is forwarded from
        * @type {?Chat}
        */
       this.senderChat = new Chat(this.client, data.sender_chat);
-    };
+    }
 
     if ('forward_from_message_id' in data) {
       /**
        * The id of the forwarded message
        * @type {?number}
        */
-      this.originalMessageId = data.forward_from_message_id
-    };
+      this.originalMessageId = data.forward_from_message_id;
+    }
 
     if ('forward_from' in data) {
       /**
@@ -128,7 +124,7 @@ class Message extends Base {
        * @type {?User}
        */
       this.originalMessageAuthor = new User(this.client, data.forward_from);
-    };
+    }
 
     if ('forward_signature' in data) {
       /**
@@ -136,7 +132,7 @@ class Message extends Base {
        * @type {?string}
        */
       this.originalMessageSignature = data.forward_signature;
-    };
+    }
 
     if ('forward_from_chat' in data) {
       /**
@@ -144,7 +140,7 @@ class Message extends Base {
        * @type {?Chat}
        */
       this.originalMessageChat = new Chat(this.client, data.forward_from_chat);
-    };
+    }
 
     if ('forward_sender_name' in data) {
       /**
@@ -152,7 +148,7 @@ class Message extends Base {
        * @type {?string}
        */
       this.originalMessageSenderName = data.forward_sender_name;
-    };
+    }
 
     if ('forward_date' in data) {
       /**
@@ -160,15 +156,15 @@ class Message extends Base {
        * @type {?Date}
        */
       this.originalMessageCreatedAt = data.forward_date;
-    };
+    }
 
     if ('caption' in data) {
       /**
        * The caption of the message
        * @type {?string}
        */
-      this.caption = caption;
-    };
+      this.caption = data.caption;
+    }
 
     if ('caption_entities' in data) {
       /**
@@ -176,7 +172,7 @@ class Message extends Base {
        * @type {?MessageEntity}
        */
       this.captionEntities = new MessageEntity({ content: this.caption }, data.caption_entities);
-    };
+    }
 
     if ('location' in data) {
       /**
@@ -184,7 +180,7 @@ class Message extends Base {
        * @type{?Location}
        */
       this.location = new Location(data.location);
-    };
+    }
 
     if ('animation' in data) {
       /**
@@ -192,7 +188,7 @@ class Message extends Base {
        * @type {?Animation}
        */
       this.animation = new Animation(data.animation);
-    };
+    }
 
     if ('audio' in data) {
       /**
@@ -200,7 +196,7 @@ class Message extends Base {
        * @type {?Audio}
        */
       this.audio = new Audio(data.audio);
-    };
+    }
 
     if ('document' in data) {
       /**
@@ -208,15 +204,15 @@ class Message extends Base {
        * @type {?Document}
        */
       this.document = new Document(data.document);
-    };
+    }
 
     if ('photo' in data) {
       /**
        * The photo of the message
        * @type {?Photo}
        */
-      this.photo = data.photo.map((photo) => new Photo(photo));
-    };
+      this.photo = data.photo.map(photo => new Photo(photo));
+    }
 
     if ('video' in data) {
       /**
@@ -224,7 +220,7 @@ class Message extends Base {
        * @type {?Video}
        */
       this.video = new Video(data.video);
-    };
+    }
 
     if ('video_note' in data) {
       /**
@@ -232,7 +228,7 @@ class Message extends Base {
        * @type {?VideoNote}
        */
       this.videoNote = new VideoNote(data.video_note);
-    };
+    }
 
     if ('voice' in data) {
       /**
@@ -240,7 +236,7 @@ class Message extends Base {
        * @type {?Voice}
        */
       this.voice = new Voice(data.voice);
-    };
+    }
 
     if ('sticker' in data) {
       /**
@@ -248,7 +244,7 @@ class Message extends Base {
        * @type {?Sticker}
        */
       this.sticker = new Sticker(data.sticker);
-    };
+    }
 
     if ('contact' in data) {
       /**
@@ -256,7 +252,7 @@ class Message extends Base {
        * @type {?Contact}
        */
       this.contact = new Contact(data.contact);
-    };
+    }
 
     if ('poll' in data) {
       /**
@@ -264,7 +260,7 @@ class Message extends Base {
        * @type {?Poll}
        */
       this.poll = new Poll(data.poll);
-    };
+    }
 
     if ('dice' in data) {
       /**
@@ -272,9 +268,8 @@ class Message extends Base {
        * @type {?Dice}
        */
       this.dice = new Dice(data.dice);
-    };
-
-  };
+    }
+  }
 
   /**
    * The timestamp at which the message was edited
@@ -282,8 +277,8 @@ class Message extends Base {
    * @type {Date}
    */
   get edited() {
-    return (this.editedAt ? true : false);
-  };
+    return !!this.editedAt;
+  }
 
   /**
    * Checks, whether the message is a reply to another message
@@ -291,7 +286,7 @@ class Message extends Base {
    * @type {boolean}
    */
   get isReply() {
-    return this.originalMessage ? true : false;
+    return !!this.originalMessage;
   }
 
   /**
@@ -300,66 +295,78 @@ class Message extends Base {
    * @type {boolean}
    */
   get isForwarded() {
-    if (this.originalMessageId || this.originalMessageChat || this.originalMessageAuthor || this.originalMessageSignature || this.originalMessageSenderName) return true;
+    if (
+      this.originalMessageId ||
+      this.originalMessageChat ||
+      this.originalMessageAuthor ||
+      this.originalMessageSignature ||
+      this.originalMessageSenderName
+    ) {
+      return true;
+    }
     return false;
-  };
+  }
 
   /**
    * Reply to the current message
-   * @param {strin} [content] The text content to replay with
-   * @param {MessageOptions} [options]
+   * @param {string} [content] The text content to replay with
+   * @param {MessageOptions} [options] Options
    * @returns {Message}
    */
   reply(content, options) {
-    return this.chat.send(content, {
+    return this.chat
+      .send(content, {
         ...options,
-        reply_to_message_id: this.id
+        reply_to_message_id: this.id,
       })
-      .then((data) => this.chat.messages.add(data));
-  };
+      .then(data => this.chat.messages.add(data));
+  }
 
   /**
-   * Edit message 
+   * Edit message
    * @param {string} content The text content to edit
-   * @param {MessageOptions} [options]
+   * @param {MessageOptions} [options] Options
+   * @returns {Promise<Message>}
    */
   edit(content, options) {
-    return this.client.api.editMessageText.post({
+    return this.client.api.editMessageText
+      .post({
         data: {
           text: content,
           chat_id: this.chat.id,
           message_id: this.id,
-          ...Util.parseOptions(options)
-        }
+          ...Util.parseOptions(options),
+        },
       })
-      .then((data) => {
-        if (typeof data == 'boolean') return data;
+      .then(data => {
+        if (typeof data === 'boolean') return data;
         return this.chat.messages.add(data);
       });
-  };
+  }
 
   /**
    * Forward the message to another chat
    * @param {number} chatId The id of chat
-   * @param {Boolean} [silent=false] Whether to disable notification or not
+   * @param {boolean} [silent=false] Whether to disable notification or not
    * @returns {Message}
    */
   forward(chatId, silent = false) {
-    return this.client.api.forwardMessage.post({
+    return this.client.api.forwardMessage
+      .post({
         data: {
           chat_id: chatId,
           from_chat_id: this.chat.id,
           message_id: this.id,
-          disable_notification: silent
-        }
+          disable_notification: silent,
+        },
       })
-      .then((data) => new Message(this.client, data));
-  };
+      .then(data => new Message(this.client, data));
+  }
 
   /**
    * Copy the message to another chat
    * @param {number} chatId The id of chat
-   * @param {MessageOptions} [options]
+   * @param {MessageOptions} [options] Options
    * @returns {Message}
    */
   copy(chatId, options) {
@@ -368,14 +375,14 @@ class Message extends Base {
         chat_id: chatId,
         from_chat_id: this.chat.id,
         message_id: this.id,
-        ...options
-      }
+        ...options,
+      },
     });
-  };
+  }
 
   /**
    * Pin the message in the chat
-   * @param {Boolean} [silent=false] Whether to disable notification 
+   * @param {boolean} [silent=false] Whether to disable notification
    * @returns {Promise<boolean>}
    */
   pin(silent = false) {
@@ -383,10 +390,10 @@ class Message extends Base {
       data: {
         chat_id: this.chat.id,
         message_id: this.id,
-        disable_notification: silent
-      }
+        disable_notification: silent,
+      },
     });
-  };
+  }
 
   /**
    * Unpin the message in the chat if pinned
@@ -396,10 +403,10 @@ class Message extends Base {
     return this.client.api.unpinChatMessage.post({
       data: {
         chat_id: this.chat.id,
-        message_id: this.id
-      }
+        message_id: this.id,
+      },
     });
-  };
+  }
 
   /**
    * Delete the message, requires `can_delete_messages` permission
@@ -409,48 +416,50 @@ class Message extends Base {
     return this.client.api.deleteMessage.post({
       data: {
         chat_id: this.chat.id,
-        message_id: this.id
-      }
+        message_id: this.id,
+      },
     });
-  };
+  }
 
   /**
    * Edit live location of the message
-   * @param {number} latitude The latitude of the message
-   * @param {number} longitude The longitude of the location
-   * @param {MessageOptions} [options]
+   * @param {number} latitude The
+   * latitude of the message
+   * @param {number} longitude The
+   * longitude of the location
+   * @param {MessageOptions} [options] Options
    * @returns {Promise<Message|boolean>}
    */
-  editLiveLocation(latitide, longitude, options = {}) {
-    return this.client.api.editMessageLiveNotification.post({
+  editLiveLocation(latitude, longitude, options = {}) {
+    return this.client.api.editMessageLiveNotification
+      .post({
         data: {
           chat_id: this.chat.id,
           message_id: this.id,
-          latitide,
+          latitude,
           longitude,
-          ...Util.parseOptions(options)
-        }
+          ...Util.parseOptions(options),
+        },
       })
-      .then((data) => new Message(this.client, data));
-  };
+      .then(data => new Message(this.client, data));
+  }
 
   /**
    * Stops live sharing of location
-   * @param {MessageOptions} [options]
+   * @param {MessageOptions} [options] Options
    * @returns {Promise<Message|boolean>}
    */
   stopLiveLocation(options = {}) {
-    return this.client.api.stopMessageLiveLocation.post({
+    return this.client.api.stopMessageLiveLocation
+      .post({
         data: {
           chat_id: this.chat.id,
           message_id: this.id,
-          ...Util.parseOptions(options)
-        }
+          ...Util.parseOptions(options),
+        },
       })
-      .then((data) => new Message(this.client, data));
-  };
-
-
-};
+      .then(data => new Message(this.client, data));
+  }
+}
 
 module.exports = Message;

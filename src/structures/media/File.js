@@ -8,7 +8,6 @@ const TelegramAPIError = require('../../errors/TelegramAPIError');
  */
 class File {
   constructor(data) {
-
     this.bufferResolvable = null;
 
     /**
@@ -35,8 +34,8 @@ class File {
        * @type {?string}
        */
       this.path = data.file_path;
-    };
-  };
+    }
+  }
 
   /**
    * Url of the file
@@ -45,16 +44,17 @@ class File {
   get url() {
     if (!this.path) return null;
     return `https://api.telegram.org/file/bot${this.client.token}/${this.path}`;
-  };
+  }
 
   /**
    * Set file
    * @param {BufferResolvable|Stream} file The file to set
+   * @returns {File}
    */
-  async setFile(file) {
+  setFile(file) {
     this.bufferResolvable = file;
     return this;
-  };
+  }
 
   /**
    * Fetch the file from API.
@@ -62,23 +62,20 @@ class File {
    * @returns {Promise<File>}
    */
   fetch() {
-    return fetch(this.url)
-      .then(async (res) => {
-        const result = await res.json();
-        if (!result.ok) throw new TelegramAPIError('/getFile', result, 'get', res.status);
-        return new File(result.result);
-      });
-  };
+    return fetch(this.url).then(async res => {
+      const result = await res.json();
+      if (!result.ok) throw new TelegramAPIError('/getFile', result, 'get', res.status);
+      return new File(result.result);
+    });
+  }
 
   /**
    * Download the file
    * @returns {Promise<Stream>}
    */
   download() {
-    return fetch(this.url)
-      .then((res) => res.body);
-  };
-
-};
+    return fetch(this.url).then(res => res.body);
+  }
+}
 
 module.exports = File;

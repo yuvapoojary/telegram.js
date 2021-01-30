@@ -1,12 +1,14 @@
+'use strict';
+
+const fs = require('fs');
 const BaseClient = require('./BaseClient');
 const PollingClient = require('./PollingClient');
 const WebhookClient = require('./WebhookClient');
-const ClientUser = require('../structures/ClientUser');
+const WorkerClient = require('./WorkerClient');
 const ChatManager = require('../managers/ChatManager');
 const UserManager = require('../managers/UserManager');
+const ClientUser = require('../structures/ClientUser');
 const CommandManager = require('../structures/CommandManager');
-const WorkerClient = require('./WorkerClient');
-const fs = require('fs');
 
 /**
  * The main hub for interacting with telegram Bot API
@@ -16,11 +18,11 @@ class Client extends BaseClient {
   /**
    * @param {ClientOptions} [options] Options for the client
    */
-  constructor(options) {
+  constructor(options = {}) {
     super(options);
     /**
      * Options of the client
-     * @type {Object} 
+     * @type {Object}
      */
     this.options = options;
 
@@ -46,7 +48,7 @@ class Client extends BaseClient {
      * The webhook client used to get updates from telegram API
      * @type {WebhookClient}
      */
-    this.webhook = new WebhookClient(this)
+    this.webhook = new WebhookClient(this);
 
     /**
      * The user manager of the client
@@ -66,20 +68,17 @@ class Client extends BaseClient {
      */
     this.token = null;
 
-
     /**
      * The client user
      * @type {?ClientUser}
      */
     this.user = null;
 
-
     /**
-     * The time at which the client was ready 
+     * The time at which the client was ready
      * @type {?Date}
      */
     this.readAt = null;
-
   }
 
   /**
@@ -88,7 +87,7 @@ class Client extends BaseClient {
    */
   get uptime() {
     return this.readyAt ? Date.now() - this.readyAt : null;
-  };
+  }
 
   /**
    * Logs the client in and starts receiving events.
@@ -96,21 +95,21 @@ class Client extends BaseClient {
    *  @returns {Promise<string>} Token of the bot used
    */
   async login(token = this.token) {
-    if (!token || typeof token != 'string') throw new Error('NO TOKEN OR INVALID TOKEN PROVIDED');
+    if (!token || typeof token !== 'string') throw new Error('NO TOKEN OR INVALID TOKEN PROVIDED');
     this.debug(`Provided token ${token}`);
     this.token = token;
 
     await this.fetchApplication();
     this.readyAt = Date.now();
     this.emit('ready');
-  };
+  }
 
   /**
    * Start polling for the updates
    */
   startPolling() {
     this.polling.start();
-  };
+  }
 
   /**
    * Set webhook endpoint
@@ -127,14 +126,16 @@ class Client extends BaseClient {
     return this.client.api.setWebhook.post({
       data: {
         url,
-        ...options
+        ...options,
       },
-      files: [{
-        name: 'certificate',
-        file: certificate
-       }]
-    })
-  };
+      files: [
+        {
+          name: 'certificate',
+          file: certificate,
+        },
+      ],
+    });
+  }
 
   /**
    * Delete webhook
@@ -144,11 +145,11 @@ class Client extends BaseClient {
   deleteWebhook(dropUpdates = false) {
     return this.client.api.deleteWebhook.post({
       data: {
-        drop_pending_updates: dropUpdates
-      }
+        drop_pending_updates: dropUpdates,
+      },
     });
-  };
-  
+  }
+
   /**
    * Set up webhook to receive updates
    * @param {string} path Path for the webhook
@@ -162,9 +163,9 @@ class Client extends BaseClient {
     if (tlsOptions) {
       tlsOptions.key = fs.readFileSync(tlsOptions.key, 'utf8');
       tlsOptions.cert = fs.readFileSync(tlsOptions.cert, 'utf8');
-    };
+    }
     this.webhook.createServer(path, port, host, tlsOptions);
-  };
+  }
 
   /**
    * Attach existing http server for webhooks
@@ -174,7 +175,7 @@ class Client extends BaseClient {
   webhookCallback(path, cb) {
     this.webhook.path(path);
     this.webhook.callback(cb);
-  };
+  }
 
   /**
    * Get information about the webhook
@@ -189,30 +190,30 @@ class Client extends BaseClient {
    * @returns {Promise<ClientUser>}
    */
   fetchApplication() {
-    return this.api.getMe.get()
-      .then((res) => {
-        this.user = new ClientUser(this, res);
-        return this.user;
-      });
-  };
+    return this.api.getMe.get().then(res => {
+      this.user = new ClientUser(this, res);
+      return this.user;
+    });
+  }
 
   /**
    * Get latest updates from telegram API
-   * @returns {Promise}
+   * @param {Object} [options] Options
+   * @returns {Promise<Object>}
    */
-  getUpdates(data) {
+  getUpdates(options) {
     return this.api.getUpdates().get({
-      query: data
+      query: options,
     });
-  };
+  }
 
   /**
    * Log outs from the cloud Bot API
    * @returns {Promise<boolean>}
    */
   logout() {
-    return this.client.logOut.post()
-  };
+    return this.client.logOut.post();
+  }
 
   /**
    * Closes the bot instance
@@ -220,7 +221,7 @@ class Client extends BaseClient {
    */
   close() {
     return this.api.close.post();
-  };
-};
+  }
+}
 
 module.exports = Client;

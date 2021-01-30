@@ -39,6 +39,7 @@
       {
         "requireReturn": false,
         "requireReturnDescription": false,
+        "requireParamDescription": false,
         "prefer": {
           "return": "returns",
           "arg": "param"
@@ -57,7 +58,6 @@
         }
       }
     ],
-
     "accessor-pairs": "warn",
     "array-callback-return": "error",
     "consistent-return": "error",
