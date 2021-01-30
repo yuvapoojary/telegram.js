@@ -15,7 +15,7 @@ class RESTManager {
   }
 
   get endpoint() {
-    return this.client.options.ApiURL;
+    return this.client.options.apiURL;
   }
 
   async request(method, path, options = {}) {
