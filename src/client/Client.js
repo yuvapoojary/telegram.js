@@ -123,7 +123,7 @@ class Client extends BaseClient {
    * @returns {Promise<boolean>}
    */
   setWebhook(url, certificate, options = {}) {
-    return this.client.api.setWebhook.post({
+    return this.api.setWebhook.post({
       data: {
         url,
         ...options,
@@ -182,7 +182,7 @@ class Client extends BaseClient {
    * @returns {Promise<Object>}
    */
   getWebhookInfo() {
-    return this.client.api.getWebhookInfo.get();
+    return this.api.getWebhookInfo.get();
   }
 
   /**
