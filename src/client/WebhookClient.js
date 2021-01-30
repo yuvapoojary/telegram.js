@@ -26,6 +26,7 @@ class WebhookClient {
   }
 
   callback(req, res) {
+    console.log(req.url, req.method);
     if (req.url.indexOf(this.path) !== -1 || req.method !== 'POST') {
       res.statusCode = 418;
       res.end();
