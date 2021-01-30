@@ -32,6 +32,11 @@ class BaseManager {
     if (existing && existing._patch) existing._patch(data);
     if (existing) return existing;
 
+    if (data instanceof this.holds) {
+      this.cache.set(data.id, data);
+      return data;
+    };
+
     const entry = new this.holds(this.client, data, ...extras);
     this.cache.set(id || entry.id, entry);
     return entry;

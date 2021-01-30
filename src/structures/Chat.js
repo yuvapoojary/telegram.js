@@ -228,8 +228,8 @@ class Chat extends Base {
       })
       .then((data) => new Message(data));
   };
-  
-  
+
+
   /**
    * Send video note
    * @param {BufferResolvable|Stream} [video] The video note to send
@@ -261,8 +261,8 @@ class Chat extends Base {
       })
       .then((data) => new Message(data));
   };
-  
-  
+
+
   /**
    * Send animation
    * @param {BufferResolvable|Stream} [animation] The animation to send
@@ -294,8 +294,8 @@ class Chat extends Base {
       })
       .then((data) => this.chat.messages.add(data, { id: data.message_id }));
   };
-  
-  
+
+
   /**
    * Send voice 
    * @param {BufferResolvable|Stream} [voice] The voice to send
@@ -317,7 +317,7 @@ class Chat extends Base {
       })
       .then((data) => new Message(data));
   };
-  
+
   /**
    * Send location
    * @param {number} latitude The latitude of location
@@ -326,17 +326,17 @@ class Chat extends Base {
    * @returns {Message}
    */
   sendLocation(latitude, longitude, options) {
-     return this.client.api.sendLocation.post({
-       data: {
-         chat_id: this.id,
-         latitude,
-         longitude,
-         ...Util.parseOptions(options)
-       }
-     })
-     .then((data) => new Message(data));
+    return this.client.api.sendLocation.post({
+        data: {
+          chat_id: this.id,
+          latitude,
+          longitude,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
   };
-  
+
   /**
    * Send media groups
    * @param {Array} media 
@@ -351,32 +351,114 @@ class Chat extends Base {
       }
     })
   };
-  
+
   sendContact(phoneNumber, firstName, lastName, options) {
     return this.client.api.sendContact.post({
-      data: {
-        chat_id: this.id,
-        phone_number: phoneNumber,
-        first_name: firstName,
-        last_name: lastName,
-        ...Util.parseOptions(options)
-      }
-    })
-    .then((data) => new Message(data));
+        data: {
+          chat_id: this.id,
+          phone_number: phoneNumber,
+          first_name: firstName,
+          last_name: lastName,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(data));
   }
-  
+
+  /**
+   * Send venue
+   * @param {MessageOptions} options 
+   * @returns {Promise<Message>}
+   */
+  sendVenue(options) {
+    return this.client.api.sendVenue.post({
+        data: {
+          chat_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
+
+  /**
+   * Send a poll
+   * @param {string} question Question of the poll
+   * @param {Array[]} answers Array of answers/options
+   * @param {MessageOptions} [options]
+   * @returns {Promise<Message>}
+   */
+  sendPoll(question, answers, options) {
+    return this.client.api.sendPoll.post({
+        data: {
+          chat_id: this.id,
+          question,
+          options: answers,
+          type: 'regular',
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
+
+  /**
+   * Send a quiz
+   * @param {string} question Question of the quiz
+   * @param {Array[]} answers Array of answers to the question
+   * @param {number} answerIndex The index of the correct answer
+   * @param {MessageOptions} [options]
+   * @returns {Promise<Message>}
+   */
+  sendQuiz(question, answers, answerIndex, options) {
+    return this.client.api.sendPoll.post({
+        data: {
+          chat_id: this.id,
+          question,
+          options: answers,
+          type: 'quiz',
+          correct_option_id: answerIndex,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
+
   /**
    * Show typing placeholder
    * @returns {Promise<booleam>}
    */
   startTyping() {
-     return this.client.api.sendChatAction.post({
-       data: {
-         chat_id: thid.id,
-         action: 'typing'
-       }
-     })
+    return this.client.api.sendChatAction.post({
+      data: {
+        chat_id: this.id,
+        action: 'typing'
+      }
+    })
   };
+
+  /**
+   * Send chat action when processing something
+   * @param {string} action The action to send. This can be:
+   * * typing
+   * * upload_photo
+   * * record_video
+   * * upload_video
+   * * record_voice
+   * * upload_voice
+   * * upload_document
+   * * find_location
+   * * record_video_note
+   * * upload_video_note
+   * @returns {Promise<boolean>}
+   */
+  sendChatAction(action) {
+    return this.client.api.sendChatAction.post({
+      data: {
+        chat_id: this.id,
+        action
+      }
+    })
+  };
+
   /**
    * Kicks a member from the chat
    * @param {String} userId The id of user to kick

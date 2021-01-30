@@ -74,7 +74,7 @@ class ChatMember extends Base {
       this.anonymous = data.is_anonymous;
     };
 
-    this.permissions = [];
+    this.permissions = new Permissions(data);
 
     if ('unix_date' in data) {
       /**

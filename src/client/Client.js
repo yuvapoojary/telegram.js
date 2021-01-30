@@ -105,11 +105,25 @@ class Client extends BaseClient {
     this.emit('ready');
   };
 
+  /**
+   * Start polling for the updates
+   */
   startPolling() {
     this.polling.start();
   };
 
-  setWebhook(url, options = {}) {
+  /**
+   * Set webhook endpoint
+   * @param {string} url Public url
+   * @param {BufferResolvable|Stream} [certificate] Required if you are using self signed certificate
+   * @param {Object} [options] Options
+   * @param {string} [options.ip_adress] Ip address of the server
+   * @param {number} [options.max_connections] Max allowed simultaneous connections
+   * @param {Array[]} [options.allowed_updates] Allowex updates to receive
+   * @param {boolean} [options.drop_pending_updates] Wether to drop pending updates
+   * @returns {Promise<boolean>}
+   */
+  setWebhook(url, certificate, options = {}) {
     return this.client.api.setWebhook.post({
       data: {
         url,
@@ -117,11 +131,16 @@ class Client extends BaseClient {
       },
       files: [{
         name: 'certificate',
-        file: options.certificate
+        file: certificate
        }]
     })
   };
 
+  /**
+   * Delete webhook
+   * @param {boolean} [dropUpdates=false] Drop pending updates
+   * @returns {Promise<boolean>}
+   */
   deleteWebhook(dropUpdates = false) {
     return this.client.api.deleteWebhook.post({
       data: {
@@ -129,7 +148,16 @@ class Client extends BaseClient {
       }
     });
   };
-
+  
+  /**
+   * Set up webhook to receive updates
+   * @param {string} path Path for the webhook
+   * @param {number} [port=8443] Port for the webhook
+   * @param {string} [host=0.0.0.0] Host for the webhook to listen on
+   * @param {Object} [tlsOptions] Tls/https options for the server
+   * @param {string} key Key file path
+   * @param {string} cert Certificate file path
+   */
   setupWebhook(path, port = 8443, host = '0.0.0.0', tlsOptions) {
     if (tlsOptions) {
       tlsOptions.key = fs.readFileSync(tlsOptions.key, 'utf8');
@@ -137,6 +165,24 @@ class Client extends BaseClient {
     };
     this.webhook.createServer(path, port, host, tlsOptions);
   };
+
+  /**
+   * Attach existing http server for webhooks
+   * @param {string} path Path for the webhook post
+   * @param {http.IncomingMessage} cb
+   */
+  webhookCallback(path, cb) {
+    this.webhook.path(path);
+    this.webhook.callback(cb);
+  };
+
+  /**
+   * Get information about the webhook
+   * @returns {Promise<Object>}
+   */
+  getWebhookInfo() {
+    return this.client.api.getWebhookInfo.get();
+  }
 
   /**
    * Fetches the authenticated bot's information

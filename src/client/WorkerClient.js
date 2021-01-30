@@ -23,7 +23,7 @@ class Worker {
     if (data.message && data.message.new_chat_members) return this.onChatMemberAdd(data.message);
     if (data.message && data.message.left_chat_member) return this.onChatMemberRemove(data.message);
     if (data.message || data.channel_post) this.onMessage(data.message || data.channel_post);
-    if (data.edited_message || data.edited_channel_post) this.onMessageEdit(data);
+    if (data.edited_message || data.edited_channel_post) this.onMessageEdit(data.edited_message || data.edited_channel_post);
     if (data.callback_query) this.onCallbackQuery(data.callback_query);
     if (data.inline_query) this.onInlineQuery(data.inline_query);
     if (data.chosen_inline_result) this.onInlineQueryResult(data.chosen_inline_result);
@@ -31,14 +31,13 @@ class Worker {
 
   onMessage(data) {
     const message = new Message(this.client, data);
-    const chat = this.client.chats.cache.get(message.chat.id);
     /**
      * Emitted whenever a message created
      * @event Client#message
      * @param {Message} message The created message
      */
     this.client.emit('message', message);
-    if (chat) chat.messages.add(data);
+    message.chat.messages.add(data);
     if (!message.content || message.content.indexOf(this.client.commands.prefix) !== 0) return;
     const args = message.content.slice(this.client.commands.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();

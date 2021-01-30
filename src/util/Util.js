@@ -146,6 +146,10 @@ class Util {
       if (msg.hasOwnProperty(type)) return type;
     })[0];
   };
+  
+  static isDoubleArray(array) {
+    return Array.isArray(array[0]);
+  };
 
 }
 

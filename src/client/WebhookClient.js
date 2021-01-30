@@ -11,14 +11,15 @@ class WebhookClient {
     this.path;
 
   };
+  
+  set path(data) {
+    this.path = data;
+  };
 
   createServer(path, port, host, tlsOptions) {
-    console.log(tlsOptions);
     this.path = path;
     this.server = tlsOptions ? https.createServer(tlsOptions, this.callback) : http.createServer(this.callback);
-    this.server.listen(port, host, () => {
-      console.log('Server is listening')
-    });
+    this.server.listen(port, host, () => {});
   };
 
   callback(req, res) {

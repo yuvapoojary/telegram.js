@@ -41,7 +41,7 @@ class Message extends Base {
     this.id = data.message_id;
 
     if (data) this._patch(data);
-    
+
     this.type = Util.messageTypes(this);
   };
 
@@ -99,92 +99,179 @@ class Message extends Base {
     this.entities = new MessageEntity(this, data.entities || []);
 
     if ('reply_to_message' in data) {
-
+      /**
+       * Original message if the message is reply
+       * @type {?Message}
+       */
       this.originalMessage = new Message(this.client, data.reply_to_message);
     };
 
     if ('sender_chat' in data) {
+      /**
+       * The chat where the message is forwarded from 
+       * @type {?Chat}
+       */
       this.senderChat = new Chat(this.client, data.sender_chat);
     };
 
     if ('forward_from_message_id' in data) {
+      /**
+       * The id of the forwarded message
+       * @type {?number}
+       */
       this.originalMessageId = data.forward_from_message_id
     };
 
     if ('forward_from' in data) {
+      /**
+       * The author of original/forwarded message
+       * @type {?User}
+       */
       this.originalMessageAuthor = new User(this.client, data.forward_from);
     };
 
     if ('forward_signature' in data) {
+      /**
+       * The author signature of the original/forwarded message
+       * @type {?string}
+       */
       this.originalMessageSignature = data.forward_signature;
     };
 
     if ('forward_from_chat' in data) {
+      /**
+       * The chat which the message is forwarded from
+       * @type {?Chat}
+       */
       this.originalMessageChat = new Chat(this.client, data.forward_from_chat);
     };
 
     if ('forward_sender_name' in data) {
+      /**
+       * The author name of the original/forwarded message
+       * @type {?string}
+       */
       this.originalMessageSenderName = data.forward_sender_name;
     };
 
     if ('forward_date' in data) {
+      /**
+       * The created time of original/forwarded message
+       * @type {?Date}
+       */
       this.originalMessageCreatedAt = data.forward_date;
     };
 
     if ('caption' in data) {
+      /**
+       * The caption of the message
+       * @type {?string}
+       */
       this.caption = caption;
     };
 
     if ('caption_entities' in data) {
+      /**
+       * The entities of the caption
+       * @type {?MessageEntity}
+       */
       this.captionEntities = new MessageEntity({ content: this.caption }, data.caption_entities);
     };
 
     if ('location' in data) {
+      /**
+       * The location of the message
+       * @type{?Location}
+       */
       this.location = new Location(data.location);
     };
 
     if ('animation' in data) {
+      /**
+       * The animation in the message
+       * @type {?Animation}
+       */
       this.animation = new Animation(data.animation);
     };
 
     if ('audio' in data) {
+      /**
+       * Audio message
+       * @type {?Audio}
+       */
       this.audio = new Audio(data.audio);
     };
 
     if ('document' in data) {
+      /**
+       * The document of the message
+       * @type {?Document}
+       */
       this.document = new Document(data.document);
     };
 
     if ('photo' in data) {
+      /**
+       * The photo of the message
+       * @type {?Photo}
+       */
       this.photo = data.photo.map((photo) => new Photo(photo));
     };
 
     if ('video' in data) {
+      /**
+       * The video of the message
+       * @type {?Video}
+       */
       this.video = new Video(data.video);
     };
 
     if ('video_note' in data) {
+      /**
+       * The video note
+       * @type {?VideoNote}
+       */
       this.videoNote = new VideoNote(data.video_note);
     };
 
     if ('voice' in data) {
+      /**
+       * The voice message
+       * @type {?Voice}
+       */
       this.voice = new Voice(data.voice);
     };
 
     if ('sticker' in data) {
+      /**
+       * Sticker of the message
+       * @type {?Sticker}
+       */
       this.sticker = new Sticker(data.sticker);
     };
 
     if ('contact' in data) {
+      /**
+       * The contact message
+       * @type {?Contact}
+       */
       this.contact = new Contact(data.contact);
     };
 
     if ('poll' in data) {
+      /**
+       * The poll of the message
+       * @type {?Poll}
+       */
       this.poll = new Poll(data.poll);
     };
 
     if ('dice' in data) {
-      this.dice = data.dice;
+      /**
+       * Dice in a message
+       * @type {?Dice}
+       */
+      this.dice = new Dice(data.dice);
     };
 
   };
@@ -326,6 +413,43 @@ class Message extends Base {
       }
     });
   };
+
+  /**
+   * Edit live location of the message
+   * @param {number} latitude The latitude of the message
+   * @param {number} longitude The longitude of the location
+   * @param {MessageOptions} [options]
+   * @returns {Promise<Message|boolean>}
+   */
+  editLiveLocation(latitide, longitude, options = {}) {
+    return this.client.api.editMessageLiveNotification.post({
+        data: {
+          chat_id: this.chat.id,
+          message_id: this.id,
+          latitide,
+          longitude,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
+
+  /**
+   * Stops live sharing of location
+   * @param {MessageOptions} [options]
+   * @returns {Promise<Message|boolean>}
+   */
+  stopLiveLocation(options = {}) {
+    return this.client.api.stopMessageLiveLocation.post({
+        data: {
+          chat_id: this.chat.id,
+          message_id: this.id,
+          ...Util.parseOptions(options)
+        }
+      })
+      .then((data) => new Message(this.client, data));
+  };
+
 
 };
 
