@@ -38,7 +38,9 @@ class WebhookClient {
         this.client.worker.processUpdate(json);
         res.statusCode = 200;
         res.end();
+        console.log('res ended');
       });
+      console.log(chunks);
     }
   }
 
