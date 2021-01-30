@@ -3,7 +3,7 @@
 module.exports = {
   // Starting points
   BaseClient: require('./client/BaseClient'),
-  Client: require('./BaseClient'),
+  Client: require('./client/Client'),
   PollingClient: require('./client/PollingClient'),
   WebhookClient: require('./client/WebhookClient'),
   WorkerClient: require('./client/WorkerClient'),
