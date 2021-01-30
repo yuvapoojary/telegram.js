@@ -1,5 +1,6 @@
 const telegram = require('./src/client/Client');
 const Message = require('./src/structures/Message');
+const Markup = require('./src/structures/Markup');
 const util = require('util');
 
 const bot = new telegram({
@@ -18,7 +19,9 @@ bot.setupWebhook('/gg', 8443, '0.0.0.0', {
   cert: './server.crt'
 });
 
-bot.on('raw', console.log);
+bot.startPolling() 
+
+bot.on('message', console.log);
 
 bot.commands.on('ping', (client, msg, args) => {
   msg.chat.send('https://crustplay.com', {
@@ -26,6 +29,12 @@ bot.commands.on('ping', (client, msg, args) => {
       inline_keyboard: [[{
         text: 'Done',
         callback_data: '12345'
+      }, {
+        text: 'Done2',
+        callback_data: '5'
+      }], [{
+        text: 'om',
+        callback_data: '66'
       }]]
     },
     embedLinks: false

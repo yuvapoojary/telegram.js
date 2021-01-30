@@ -6,7 +6,7 @@ client.on('ready', () => {
 });
 
 client.on('message', (msg) => {
-  if(msg.content === 'hii') {
+  if (msg.content === 'hii') {
     msg.reply('hello');
   };
 });
@@ -16,3 +16,11 @@ client.commands.on('ping', (bot, msg, args) => {
 });
 
 client.login('token');
+
+
+client.startPolling();
+
+// OR
+
+client.setWebhook('https://<PUBLIC_URL>/secretpath');
+client.setupwebhook('/secretpath');
