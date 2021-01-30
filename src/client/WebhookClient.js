@@ -8,13 +8,12 @@ const https = require('https');
  */
 class WebhookClient {
   constructor(client) {
-    Object.defineProperty(this, 'client', { value: client });
-
+    this.client = client;
     this.server = null;
     this.path = null;
   };
-  
-  
+
+
   setPath(data) {
     this.path = data
   }
@@ -34,7 +33,12 @@ class WebhookClient {
       req.setEncoding('utf-8');
       req.on('data', chunk => (chunks += chunk));
       req.on('end', () => {
-        const json = JSON.parse(chunks);
+        let json;
+        try {
+          json = JSON.parse(chunks);
+        } catch (err) {
+          throw new Error('Expected valid json in webhook');
+        };
         this.client.worker.processUpdate(json);
         res.statusCode = 200;
         res.end();
