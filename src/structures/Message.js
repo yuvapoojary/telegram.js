@@ -39,7 +39,11 @@ class Message extends Base {
     this.id = data.message_id;
 
     if (data) this._patch(data);
-
+    
+    /**
+     * The message type
+     * @type {MessageTypes} 
+     */
     this.type = Util.messageTypes(this);
   }
 
@@ -177,7 +181,7 @@ class Message extends Base {
     if ('location' in data) {
       /**
        * The location of the message
-       * @type{?Location}
+       * @type {?Location}
        */
       this.location = new Location(data.location);
     }
