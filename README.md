@@ -10,7 +10,7 @@
 
 - [About](#about)
 - [Installation](#installation)
-- [Example Usage](#example)
+- [Example Usage](#example-usage)
 - [Links](#links)
 - [Contributing](#contributing)
 - [Help](#help)
