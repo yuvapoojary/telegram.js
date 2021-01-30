@@ -20,16 +20,16 @@ class WebhookClient {
 
   createServer(path, port, host, tlsOptions) {
     this.path = path;
-    this.server = tlsOptions ? https.createServer(tlsOptions, this.callback) : http.createServer(this.callback);
+    this.server = tlsOptions ? https.createServer(tlsOptions, this.callback.bind(this)) : http.createServer(this.callback.bind(this));
     this.server.listen(port, host);
   }
 
   callback(req, res) {
-    const processUpdate = this.client.worker.processUpdate.bind(this.client.worker);
     if (req.url.indexOf(this.path) !== -1 || req.method !== 'POST') {
       res.statusCode = 418;
       res.end();
     } else {
+      const self = this.client;
       let chunks = '';
       req.setEncoding('utf-8');
       req.on('data', chunk => (chunks += chunk));
@@ -40,7 +40,7 @@ class WebhookClient {
         } catch (err) {
           throw new Error('Expected valid json in webhook');
         };
-        processUpdate(json);
+        self.worker.processUpdate(json);
         res.statusCode = 200;
         res.end();
       });
