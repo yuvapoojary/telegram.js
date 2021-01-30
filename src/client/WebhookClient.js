@@ -25,6 +25,7 @@ class WebhookClient {
   }
 
   callback(req, res) {
+    const processUpdate = this.client.worker.processUpdate.bind(this.client.worker);
     if (req.url.indexOf(this.path) !== -1 || req.method !== 'POST') {
       res.statusCode = 418;
       res.end();
@@ -39,7 +40,7 @@ class WebhookClient {
         } catch (err) {
           throw new Error('Expected valid json in webhook');
         };
-        this.client.worker.processUpdate(json);
+        processUpdate(json);
         res.statusCode = 200;
         res.end();
       });
