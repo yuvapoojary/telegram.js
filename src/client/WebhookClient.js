@@ -14,11 +14,8 @@ class WebhookClient {
     this.path = null;
   };
   
-  get path() {
-    return this.path
-  }
   
-  set path(data) {
+  setPath(data) {
     this.path = data
   }
 

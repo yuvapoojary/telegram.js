@@ -173,7 +173,7 @@ class Client extends BaseClient {
    * @param {http.IncomingMessage} cb
    */
   webhookCallback(path, cb) {
-    this.webhook.path(path);
+    this.webhook.setPath(path);
     this.webhook.callback(cb);
   }
 
