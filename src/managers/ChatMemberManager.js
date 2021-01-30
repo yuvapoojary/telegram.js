@@ -9,16 +9,14 @@ const ChatMember = require('../structures/ChatMember');
  */
 class ChatMemberManager extends BaseManager {
   constructor(client, iterable) {
-    super(client, iterable, ChatMember, client.options.memberCacheMaxSize)
-  };
+    super(client, iterable, ChatMember, client.options.memberCacheMaxSize);
+  }
 
   /**
    * The cache of this manager
    * @type {Collection<Message>}
    * @name ChatMemberManager#cache
    */
-
-
-};
+}
 
 module.exports = ChatMemberManager;

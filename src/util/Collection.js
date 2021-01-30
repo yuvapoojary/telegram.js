@@ -26,7 +26,7 @@ class Collection extends CollectionModule {
     return super.set(key, value);
   }
 
-  static get[Symbol.species]() {
+  static get [Symbol.species]() {
     return CollectionModule;
   }
 }

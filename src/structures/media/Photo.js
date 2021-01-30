@@ -14,15 +14,13 @@ class Photo extends File {
      * @type {number}
      */
     this.width = data.width;
-    
+
     /**
      * Height of the photo
      * @type {number}
      */
     this.height = data.height;
-  };
-  
-  
-};
+  }
+}
 
 module.exports = Photo;

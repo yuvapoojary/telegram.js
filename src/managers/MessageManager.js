@@ -10,14 +10,14 @@ let Message;
 class MessageManager extends BaseManager {
   constructor(client, iterable) {
     if (!Message) Message = require('../structures/Message');
-    super(client, iterable, Message, client.options.messageCacheMaxSize)
-  };
+    super(client, iterable, Message, client.options.messageCacheMaxSize);
+  }
 
   /**
    * The cache of this manager
    * @type {Collection<Message>}
    * @name MessageManager#cache
    */
-};
+}
 
 module.exports = MessageManager;

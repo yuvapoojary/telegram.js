@@ -9,7 +9,7 @@ const Base = require('./Base');
 class User extends Base {
   /**
    * @param {Client} client The instantiating client
-   * @param {object} data The data for the user
+   * @param {Object} data The data for the user
    */
   constructor(client, data) {
     super(client, data);
@@ -24,13 +24,13 @@ class User extends Base {
   }
 
   _patch(data) {
-    /** 
+    /**
      * First name of the user
      * @type {string}
      */
     this.firstName = data.first_name;
 
-    /** 
+    /**
      * Whether the user is bot or not
      * @type {boolean}
      */
@@ -42,21 +42,17 @@ class User extends Base {
      */
     this.lastName = data.lastName || null;
 
-
-    /** 
+    /**
      * Username of the user
      * @type {?string}
      */
     this.username = data.username || null;
 
-
-
-    /** 
+    /**
      * The language of the user
      * @type {?string}
      */
     this.language = data.languageCode || null;
-
   }
 
   /**
@@ -70,11 +66,10 @@ class User extends Base {
       data: {
         user_id: this.id,
         limit,
-        offset
-      }
+        offset,
+      },
     });
-  };
-
-};
+  }
+}
 
 module.exports = User;

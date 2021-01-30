@@ -33,7 +33,7 @@ class MessageCollector extends Collector {
      * @type {number}
      */
     this.received = 0;
-   
+
     this.client.incrementMaxListeners();
     this.client.on('message', this.handleCollect);
 
@@ -83,7 +83,7 @@ class MessageCollector extends Collector {
     if (this.options.max && this.collected.size >= this.options.max) return 'limit';
     if (this.options.maxProcessed && this.received === this.options.maxProcessed) return 'processedLimit';
     return null;
-  };
+  }
 }
 
 module.exports = MessageCollector;

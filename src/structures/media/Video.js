@@ -10,19 +10,19 @@ const Photo = require('./Photo');
 class Video extends File {
   constructor(data = {}) {
     super(data);
-    
+
     /**
      * Width of the video
      * @type {number}
      */
     this.width = data.width;
-    
+
     /**
      * Height of the video
      * @type {number}
      */
     this.height = data.height;
-    
+
     /**
      * Duration of the video in seconds
      * @type {number}
@@ -35,7 +35,7 @@ class Video extends File {
        * @type {?string}
        */
       this.name = data.file_name;
-    };
+    }
 
     if ('thumb' in data) {
       /**
@@ -43,7 +43,7 @@ class Video extends File {
        * @type {?Photo}
        */
       this.thumbnail = new Photo(data.thumb);
-    };
+    }
 
     if ('mime_type' in data) {
       /**
@@ -51,8 +51,8 @@ class Video extends File {
        * @type {?string}
        */
       this.mimeType = data.mime_type;
-    };
-  };
-};
+    }
+  }
+}
 
 module.exports = Video;

@@ -51,6 +51,5 @@ module.exports = {
   Sticker: require('./structures/media/Sticker'),
   Video: require('./structures/media/Video'),
   VideoNote: require('./structures/media/VideoNote'),
-  Voice: require('./structures/media/Voice')
-
+  Voice: require('./structures/media/Voice'),
 };

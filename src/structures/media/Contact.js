@@ -1,12 +1,11 @@
 'use strict';
 
-/** 
+/**
  * Represents the contact
  * @extends {File}
  */
 class Contact {
   constructor(data = {}) {
-
     /**
      * Contact's phone number
      * @type {string}
@@ -25,15 +24,15 @@ class Contact {
        * @type {?string}
        */
       this.lastName = data.last_name;
-    };
+    }
 
     if ('user_id' in data) {
       /**
        * Contact's user identifier
        * @type {?number}
        */
-      this.userId = data.user_id
-    };
+      this.userId = data.user_id;
+    }
 
     if ('vcard' in data) {
       /**
@@ -41,8 +40,8 @@ class Contact {
        * @type {?string}
        */
       this.vcard = data.vcard;
-    };
-  };
-};
+    }
+  }
+}
 
 module.exports = Contact;

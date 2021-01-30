@@ -1,8 +1,8 @@
 'use strict';
 
 const Base = require('./Base');
-const User = require('./User');
 const Location = require('./Location');
+const User = require('./User');
 
 /**
  * Represents the choosen result of InlineQuery
@@ -21,10 +21,9 @@ class InlineChosenResult extends Base {
     this.id = data.result_id;
 
     this._patch(data);
-  };
+  }
 
   _patch(data) {
-
     /**
      * The user who choosen the inline query result
      * @type {User}
@@ -43,7 +42,7 @@ class InlineChosenResult extends Base {
        * @type {?string}
        */
       this.inlineMessageId = data.inline_message_id;
-    };
+    }
 
     if ('location' in data) {
       /**
@@ -51,8 +50,8 @@ class InlineChosenResult extends Base {
        * @type {?Location}
        */
       this.location = new Location(data.location);
-    };
+    }
   }
-};
+}
 
 module.exports = InlineChosenResult;

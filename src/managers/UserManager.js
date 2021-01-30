@@ -9,16 +9,14 @@ const User = require('../structures/User');
  */
 class UserManager extends BaseManager {
   constructor(client, iterable) {
-    super(client, iterable, User, client.options.userCacheMaxSize)
-  };
+    super(client, iterable, User, client.options.userCacheMaxSize);
+  }
 
   /**
    * The cache of this manager
    * @type {Collection<Message>}
    * @name UserManager#cache
    */
-
-
-};
+}
 
 module.exports = UserManager;

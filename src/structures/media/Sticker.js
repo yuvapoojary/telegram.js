@@ -35,7 +35,7 @@ class Sticker extends File {
        * @type {?Photo}
        */
       this.thumbnail = new Photo(data.thumb);
-    };
+    }
 
     if ('emoji' in data) {
       /**
@@ -43,7 +43,7 @@ class Sticker extends File {
        * @type {?string}
        */
       this.emoji = data.emoji;
-    };
+    }
 
     if ('set_name' in data) {
       /**
@@ -51,7 +51,7 @@ class Sticker extends File {
        * @type {?string}
        */
       this.setName = data.set_name;
-    };
+    }
 
     if ('mask_position' in data) {
       /**
@@ -59,9 +59,8 @@ class Sticker extends File {
        * @type {Object}
        */
       this.maskPosition = data.mask_position;
-    };
-  };
-
-};
+    }
+  }
+}
 
 module.exports = Sticker;

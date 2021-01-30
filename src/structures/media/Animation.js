@@ -35,7 +35,7 @@ class Animation extends File {
        * @type {?string}
        */
       this.name = data.file_name;
-    };
+    }
 
     if ('thumb' in data) {
       /**
@@ -43,7 +43,7 @@ class Animation extends File {
        * @type {?Photo}
        */
       this.thumbnail = new Photo(data.thumb);
-    };
+    }
 
     if ('mime_type' in data) {
       /**
@@ -51,8 +51,8 @@ class Animation extends File {
        * @type {?string}
        */
       this.mimeType = data.mime_type;
-    };
-  };
-};
+    }
+  }
+}
 
 module.exports = Animation;

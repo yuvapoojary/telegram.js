@@ -23,7 +23,7 @@ class Audio extends File {
        * @type {?string}
        */
       this.title = data.title;
-    };
+    }
 
     if ('performer' in data) {
       /**
@@ -31,7 +31,7 @@ class Audio extends File {
        * @type {?string}
        */
       this.performer = data.performer;
-    };
+    }
 
     if ('file_name' in data) {
       /**
@@ -39,7 +39,7 @@ class Audio extends File {
        * @type {?string}
        */
       this.name = data.file_name;
-    };
+    }
 
     if ('thumb' in data) {
       /**
@@ -47,7 +47,7 @@ class Audio extends File {
        * @type {?Photo}
        */
       this.thumbnail = new Photo(data.thumb);
-    };
+    }
 
     if ('mime_type' in data) {
       /**
@@ -55,8 +55,8 @@ class Audio extends File {
        * @type {?string}
        */
       this.mimeType = data.mime_type;
-    };
-  };
-};
+    }
+  }
+}
 
 module.exports = Audio;

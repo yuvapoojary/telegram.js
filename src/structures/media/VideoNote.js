@@ -29,9 +29,8 @@ class VideoNote extends File {
        * @type {?Photo}
        */
       this.thumbnail = new Photo(data.thumb);
-    };
-
-  };
-};
+    }
+  }
+}
 
 module.exports = VideoNote;
