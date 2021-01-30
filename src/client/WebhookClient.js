@@ -26,21 +26,19 @@ class WebhookClient {
   }
 
   callback(req, res) {
-    console.log(req.url, req.method);
     if (req.url.indexOf(this.path) !== -1 || req.method !== 'POST') {
       res.statusCode = 418;
       res.end();
     } else {
       let chunks = '';
-      res.on('data', chunk => (chunks += chunk));
-      res.on('end', () => {
+      req.setEncoding('utf-8');
+      req.on('data', chunk => (chunks += chunk));
+      req.on('end', () => {
         const json = JSON.parse(chunks);
         this.client.worker.processUpdate(json);
         res.statusCode = 200;
         res.end();
-        console.log('res ended');
       });
-      console.log(chunks);
     }
   }
 
