@@ -32,7 +32,7 @@ telegram.js is a powerful module that allows you to easily interact with the [Te
 ## Example Usage
 
 ```js 
-const Telegram = require('telegram.js');
+const Telegram = require('@yuva1422/telegram.js');
 const client = new Telegram.Client();
 
 client.on('ready', () => {
