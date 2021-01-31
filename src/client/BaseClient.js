@@ -5,6 +5,7 @@ const EventEmitter = require('events');
 const RestManager = require('../rest/RESTManager');
 const { ClientOptions } = require('../util/Constants');
 const Util = require('../util/Util');
+const debug = require('debug')('T.JS');
 
 /**
  * The base class for all clients.
@@ -59,12 +60,9 @@ class BaseClient extends EventEmitter {
     return this.rest.api;
   }
 
-  /**
-   * Emits debug event
-   * @param {string} content Content to emit
-   */
-  async debug(content) {
-    await this.emit('debug', content);
+  // eslint-disable-next-line
+  async debug(...args) {
+    debug(...args);
   }
 
   /**

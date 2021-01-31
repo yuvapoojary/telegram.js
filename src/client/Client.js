@@ -125,7 +125,7 @@ class Client extends BaseClient {
   setWebhook(url, certificate, options = {}) {
     return this.api.setWebhook.post({
       data: {
-        url,
+        url: url,
         ...options,
       },
       files: [
