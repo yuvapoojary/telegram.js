@@ -122,18 +122,12 @@ class Client extends BaseClient {
    * @param {boolean} [options.drop_pending_updates] Wether to drop pending updates
    * @returns {Promise<boolean>}
    */
-  setWebhook(url, certificate, options = {}) {
+  setWebhook(url, options = {}) {
     return this.api.setWebhook.post({
       data: {
         url: url,
         ...options,
-      },
-      files: [
-        {
-          name: 'certificate',
-          file: certificate,
-        },
-      ],
+      }
     });
   }
 

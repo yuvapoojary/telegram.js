@@ -55,8 +55,8 @@ class APIRequest {
       body = JSON.stringify(this.options.data);
       headers['Content-Type'] = 'application/json';
     }
-    
-    this.rest.client.debug(`Making ${this.method} to ${this.path}, ${body}`);
+
+    this.rest.client.debug(`Making ${this.method} to ${this.path}`);
     return fetch(url, {
       headers,
       method: this.method,
