@@ -31,7 +31,8 @@ class APIRequest {
     if (this.method === 'get') {
       return fetch(url, {
         method: this.method,
-        agent,
+        headers,
+        agent
       });
     }
 

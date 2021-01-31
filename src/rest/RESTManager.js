@@ -34,7 +34,8 @@ class RESTManager {
     } catch (err) {
       throw new HTTPError(err.message, err.constructor.name, err.status, method, path);
     }
-
+    
+    this.client.debug(`Got ${res.status} from request to path ${path}`);
     if (res.ok && result.ok) return result.result;
 
     throw new TelegramAPIError(path, result, `${method}`, res.status);
