@@ -13,9 +13,9 @@ bot.setupWebhook('/gg', 8443, '0.0.0.0', {
   cert: './server.crt'
 });
 
-bot.setWebhook('https://66.42.32.72:8443/gg', './server.crt');
+bot.setWebhook('https://66.42.32.72:8443/gg');
 
-bot.on('message', console.log);
+bot.on('raw', console.log);
 
 bot.commands.on('eval', async (c, msg, args) => {
   let evaled = await eval(args.join(' '));
@@ -23,4 +23,10 @@ bot.commands.on('eval', async (c, msg, args) => {
     evaled = util.inspect(evaled);
   };
   msg.chat.send('```js\n' + evaled + '```', { mode: 'MarkdownV2' });
+});
+
+bot.getWebhookInfo().then(data => console.log('WB', data));
+
+bot.on('ready', () => {
+  console.log('Bot logged in as ' + bot.user.username);
 });
