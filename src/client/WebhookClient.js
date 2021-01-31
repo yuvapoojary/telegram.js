@@ -30,6 +30,7 @@ class WebhookClient {
       res.end();
     } else {
       const self = this.client;
+      self.debug(`Incoming update through webhook`);
       let chunks = '';
       req.setEncoding('utf-8');
       req.on('data', chunk => (chunks += chunk));
@@ -37,6 +38,7 @@ class WebhookClient {
         let json;
         try {
           json = JSON.parse(chunks);
+          self.debug(`Incoming webhook json ${json}`);
         } catch (err) {
           throw new Error('Expected valid json in webhook');
         };
