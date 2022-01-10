@@ -1,6 +1,6 @@
 {
   "name": "@yuva1422/telegram.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A powerful Node.js module that allows you to easily interact with the Telegram Bot API",
   "main": "src/index.js",
   "author": "yuvapoojary",
