@@ -48,7 +48,7 @@ class ChatManager extends BaseManager {
   fetch(id) {
     return this.client.api.getChat
       .get({
-        data: {
+        query: {
           chat_id: id,
         },
       })
