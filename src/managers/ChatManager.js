@@ -52,7 +52,7 @@ class ChatManager extends BaseManager {
           chat_id: id,
         },
       })
-      .then(data => new Chat(data));
+      .then(data => new Chat(this.client, data));
   }
 }
 
