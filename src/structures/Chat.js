@@ -26,7 +26,7 @@ class Chat extends Base {
 
     this.messages = new MessageManager(this.client);
 
-    this.members = new ChatMemberManager(this.client);
+    this.members = new ChatMemberManager(this.client, this.id);
 
     if (data) this._patch(data);
     if (!Message) Message = require('./Message');

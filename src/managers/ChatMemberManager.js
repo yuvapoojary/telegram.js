@@ -8,8 +8,10 @@ const ChatMember = require('../structures/ChatMember');
  * @extends {BaseManager}
  */
 class ChatMemberManager extends BaseManager {
-  constructor(client, iterable) {
+  constructor(client, chatId, iterable) {
     super(client, iterable, ChatMember, client.options.memberCacheMaxSize);
+
+    this.chatId = chatId;
   }
 
   /**
@@ -17,6 +19,17 @@ class ChatMemberManager extends BaseManager {
    * @type {Collection<Message>}
    * @name ChatMemberManager#cache
    */
+
+  fetch(id) {
+    return this.client.api.getChatMember
+      .get({
+        query: {
+          chat_id: this.chatId,
+          user_id: id
+        },
+      })
+      .then(data => new ChatMember(this.client, chatId, data));
+  }
 }
 
 module.exports = ChatMemberManager;
