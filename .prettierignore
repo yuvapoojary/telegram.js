@@ -1,0 +1,9 @@
+**/dist
+**/node_modules
+**/vendor
+**/.next
+**/*.api.json
+packages/types/src/types.ts
+packages/types/src/methods.ts
+packages/types/src/metadata.ts
+package-lock.json

@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+
+      # Regenerate the typed core and fail if it drifts from the committed output.
+      - run: npm run -w @telegramxjs/types generate
+      - name: Ensure generated output is committed
+        run: git diff --exit-code packages/types/src
+
+      # Turborepo fans these out across packages in dependency order.
+      - run: npm run build
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm test
+
+      # Doc models + docs website (static export).
+      - run: npm run docs
+      - run: npm run build --workspace @telegramxjs/website
