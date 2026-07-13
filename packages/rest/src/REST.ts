@@ -93,10 +93,7 @@ export class REST {
       res = await fetch(url, { method: 'POST', body, headers, signal: controller.signal });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      throw new HTTPError(
-        method,
-        controller.signal.aborted ? `Request timed out after ${timeout}ms` : message,
-      );
+      throw new HTTPError(method, controller.signal.aborted ? `Request timed out after ${timeout}ms` : message);
     } finally {
       clearTimeout(timer);
     }
