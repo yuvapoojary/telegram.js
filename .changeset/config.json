@@ -1,0 +1,11 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "yuvapoojary/telegram.js" }],
+  "commit": false,
+  "fixed": [["telegramxjs", "@telegramxjs/rest", "@telegramxjs/builders", "@telegramxjs/types"]],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "master",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

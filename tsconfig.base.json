@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "types": ["node"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "paths": {
+      "telegramxjs": ["./packages/telegram.js/src/index.ts"],
+      "@telegramxjs/types": ["./packages/types/src/index.ts"],
+      "@telegramxjs/rest": ["./packages/rest/src/index.ts"],
+      "@telegramxjs/builders": ["./packages/builders/src/index.ts"]
+    }
+  }
+}

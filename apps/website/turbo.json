@@ -1,0 +1,12 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "^docs"],
+      "outputs": [".next/**", "out/**"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build", "^docs"]
+    }
+  }
+}
