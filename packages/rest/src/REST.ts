@@ -18,6 +18,9 @@ export const DEFAULT_REST_OPTIONS: RESTOptions = {
   maxRetries: 3,
 };
 
+/** Extra time added on top of a long-poll window before the HTTP request is aborted. */
+const LONG_POLL_BUFFER_MS = 10_000;
+
 interface ApiResponse<T> {
   ok: boolean;
   result?: T;
@@ -81,8 +84,9 @@ export class REST {
     const url = `${this.options.apiRoot}/bot${this.#token}/${method}`;
     const { body, headers } = await buildBody(params ?? {});
 
+    const timeout = this.#timeoutFor(params);
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this.options.timeout);
+    const timer = setTimeout(() => controller.abort(), timeout);
 
     let res: Response;
     try {
@@ -91,7 +95,7 @@ export class REST {
       const message = err instanceof Error ? err.message : String(err);
       throw new HTTPError(
         method,
-        controller.signal.aborted ? `Request timed out after ${this.options.timeout}ms` : message,
+        controller.signal.aborted ? `Request timed out after ${timeout}ms` : message,
       );
     } finally {
       clearTimeout(timer);
@@ -104,6 +108,20 @@ export class REST {
       throw new HTTPError(method, `Failed to parse response body (HTTP ${res.status})`, res.status);
     }
     return json;
+  }
+
+  /**
+   * Compute the HTTP timeout for a request. Long-poll calls (those carrying a `timeout`
+   * parameter in seconds, e.g. `getUpdates`) must be allowed to run longer than the poll
+   * window, so the connection isn't aborted while Telegram is holding it open. A buffer is
+   * added on top of the poll window for network latency.
+   */
+  #timeoutFor(params: Record<string, unknown>): number {
+    const longPoll = params.timeout;
+    if (typeof longPoll === 'number' && longPoll > 0) {
+      return Math.max(this.options.timeout, longPoll * 1000 + LONG_POLL_BUFFER_MS);
+    }
+    return this.options.timeout;
   }
 
   /**

@@ -1,5 +1,5 @@
 /**
- * Code generator for telegram.js.
+ * Code generator for telegramx.js.
  *
  * Reads the machine-readable Telegram Bot API spec (vendor/api.json, sourced from
  * https://github.com/PaulSonOfLars/telegram-bot-api-spec) and emits the fully-typed

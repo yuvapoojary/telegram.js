@@ -1,0 +1,37 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches: [master, main]
+  workflow_dispatch:
+
+# GITHUB_TOKEN needs write access to push the built site to the gh-pages branch.
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      # Build every package and (re)generate the api-extractor doc models the site reads.
+      - run: npm run docs
+
+      # Static export of the docs site -> apps/website/out (postbuild adds .nojekyll).
+      - run: npm run build --workspace @telegramxjs/website
+
+      # Publish the built site to this repo's gh-pages branch.
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: apps/website/out
+          cname: telegram.js.org
+          commit_message: "docs: deploy ${{ github.sha }}"

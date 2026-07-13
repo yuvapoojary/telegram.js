@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "node -e \"require('fs').writeFileSync('out/.nojekyll','')\"",
+    "preview": "npx serve out",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },

@@ -21,7 +21,7 @@ process.stdout.write(`Logged in as @${me.username} (id ${me.id})\n`);
 
 const chatId = process.env.TELEGRAM_TEST_CHAT_ID;
 if (chatId) {
-  const sent = await client.api.sendMessage({ chat_id: chatId, text: 'telegram.js v2 smoke test ✅' });
+  const sent = await client.api.sendMessage({ chat_id: chatId, text: 'telegramx.js v2 smoke test ✅' });
   process.stdout.write(`Sent message ${sent.message_id} to chat ${chatId}\n`);
 }
 

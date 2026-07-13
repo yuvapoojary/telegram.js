@@ -13,11 +13,14 @@
     }
   },
   "files": ["dist"],
+  "sideEffects": false,
   "engines": { "node": ">=18" },
   "license": "Apache-2.0",
   "homepage": "https://telegram.js.org",
-  "repository": { "type": "git", "url": "https://github.com/yuvapoojary/telegram.js" },
-  "keywords": ["telegram", "telegram.js", "telegram-bot", "bot", "api", "client", "typescript"],
+  "repository": { "type": "git", "url": "git+https://github.com/yuvapoojary/telegram.js.git", "directory": "packages/telegram.js" },
+  "bugs": { "url": "https://github.com/yuvapoojary/telegram.js/issues" },
+  "publishConfig": { "access": "public", "provenance": true },
+  "keywords": ["telegram", "telegramx.js", "telegram-bot", "bot", "api", "client", "typescript"],
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
@@ -27,8 +30,8 @@
     "smoke": "node scripts/smoke.ts"
   },
   "dependencies": {
-    "@telegramxjs/builders": "*",
-    "@telegramxjs/rest": "*",
-    "@telegramxjs/types": "*"
+    "@telegramxjs/builders": "^2.0.0",
+    "@telegramxjs/rest": "^2.0.0",
+    "@telegramxjs/types": "^2.0.0"
   }
 }

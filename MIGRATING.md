@@ -1,6 +1,6 @@
 # Migrating from v1 to v2
 
-telegram.js v2 is a full TypeScript rewrite. It is a **breaking release** — the public API has
+telegramx.js v2 is a full TypeScript rewrite. It is a **breaking release** — the public API has
 changed to be typed, complete, and consistent with the current Bot API. This guide covers the
 changes most likely to affect existing bots.
 

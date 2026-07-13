@@ -8,6 +8,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "noEmit": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -17,11 +18,11 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "baseUrl": ".",
     "paths": {
-      "@telegramxjs/types": ["packages/types/src/index.ts"],
-      "@telegramxjs/rest": ["packages/rest/src/index.ts"],
-      "@telegramxjs/builders": ["packages/builders/src/index.ts"]
+      "telegramxjs": ["./packages/telegram.js/src/index.ts"],
+      "@telegramxjs/types": ["./packages/types/src/index.ts"],
+      "@telegramxjs/rest": ["./packages/rest/src/index.ts"],
+      "@telegramxjs/builders": ["./packages/builders/src/index.ts"]
     }
   }
 }

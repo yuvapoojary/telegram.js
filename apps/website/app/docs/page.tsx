@@ -7,7 +7,7 @@ export default function DocsIndex() {
     <div>
       <h1 className="text-3xl font-bold">API Reference</h1>
       <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-        Generated from the source of every package in the telegram.js monorepo.
+        Generated from the source of every package in the telegramx.js monorepo.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {packages.map(pkg => (

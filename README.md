@@ -6,7 +6,7 @@
 <br />
 </div>
 
-# telegram.js
+# telegramx.js
 
 A powerful, fully-typed Node.js library for the [Telegram Bot API](https://core.telegram.org/bots/api),
 inspired by [discord.js](https://github.com/discordjs/discord.js).
