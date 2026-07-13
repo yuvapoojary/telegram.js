@@ -27,7 +27,7 @@
     "lint": "eslint src scripts",
     "test": "vitest run",
     "docs": "api-extractor run --local",
-    "smoke": "node scripts/smoke.ts"
+    "smoke": "tsx scripts/smoke.ts"
   },
   "dependencies": {
     "@telegramxjs/builders": "^2.0.0",

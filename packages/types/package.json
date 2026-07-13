@@ -22,7 +22,7 @@
   "publishConfig": { "access": "public", "provenance": true },
   "keywords": ["telegram", "telegram-bot", "bot", "api", "types", "typescript"],
   "scripts": {
-    "generate": "node scripts/generate.ts",
+    "generate": "tsx scripts/generate.ts",
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src scripts",
